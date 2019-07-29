@@ -4,10 +4,10 @@ services:
   mongo:
     container_name: mongo
     image: mongo
-    ports: 
+    ports:
       - '27017:27017'
     volumes:
-     - ./data-db:/data/db
+      - ./data-db:/data/db
   app:
     depends_on:
       - mongo
