@@ -88,7 +88,6 @@ router.post('/users/resetPassword', userController.resetPassword);
 router.post('/users/updatePush', userController.updatePushToken);
 router.post('/users/removePush', userController.removePushToken);
 router.post('/users/me', userController.verify);
-app.use('/api/users', users)
 
 let voletController = require('../controllers/Volet');
 router.get('/volet', voletController.getAll);
