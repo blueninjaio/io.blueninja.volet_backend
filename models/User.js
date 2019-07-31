@@ -11,7 +11,9 @@ const schema = new mongoose.Schema({
         type: String,
         default: 'User'
     },
-    password: String
+    password: String,
+    credits: String,
+    dateCreated: String
 });
 const model = mongoose.model('User', schema);
 

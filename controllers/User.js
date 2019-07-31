@@ -37,7 +37,9 @@ module.exports = {
             google_id,
             f_name,
             l_name,
-            email
+            email,
+            credits: 0,
+            dateCreated: new Date()
         };
         newUser.password = bcrypt.hashSync(password, 8);
 
