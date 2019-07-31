@@ -14,8 +14,8 @@ module.exports = {
                 success: true,
                 static,
                 message: "Static Pages Received"
-            })
-        })
+            });
+        });
     },
     editFaq: (req, res) => {
         let { faq } = req.body;
@@ -43,9 +43,9 @@ module.exports = {
                             success: true,
                             static,
                             message: "Success: Successfully created FAQ Static Page."
-                        })
+                        });
                     }
-                })
+                });
             } else {
                 let update = {
                     faq
@@ -62,10 +62,10 @@ module.exports = {
                     return res.status(200).send({
                         success: true,
                         message: "Success: Successfully edited FAQ Static Page."
-                    })
-                })
+                    });
+                });
             }
-        })
+        });
     },
     editPolicies: (req, res) => {
         let { policies } = req.body;
@@ -93,9 +93,9 @@ module.exports = {
                             success: true,
                             static,
                             message: "Success: Successfully created Policies Static Page."
-                        })
+                        });
                     }
-                })
+                });
             } else {
                 let update = {
                     policies
@@ -112,9 +112,9 @@ module.exports = {
                     return res.status(200).send({
                         success: true,
                         message: "Success: Successfully edited Policies Static Page."
-                    })
-                })
+                    });
+                });
             }
-        })
+        });
     }
 };

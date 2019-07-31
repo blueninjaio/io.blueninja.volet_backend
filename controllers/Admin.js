@@ -16,8 +16,8 @@ module.exports = {
                 success: true,
                 users: users,
                 message: "Success: Admins received"
-            })
-        })
+            });
+        });
     },
     create: (req, res) => {
         let {
@@ -34,13 +34,12 @@ module.exports = {
                     success: false,
                     message: "Erro: There was a problem adding the Admin"
                 });
-            } else {
-                return res.status(200).send({
-                    success: true,
-                    message: `Success: Admin was successfully created`
-                })
             }
-        })
+            return res.status(200).send({
+                success: true,
+                message: `Success: Admin was successfully created`
+            });
+        });
     },
     login: (req, res) => {
         let { email, password } = req.body;
@@ -84,14 +83,13 @@ module.exports = {
                     success: false,
                     message: "Server Error"
                 });
-            } else {
-                return res.status(200).send({
-                    success: true,
-                    user: user,
-                    message: "Success: User verified"
-                })
             }
-        })
+            return res.status(200).send({
+                success: true,
+                user: user,
+                message: "Success: User verified"
+            });
+        });
     },
     forgotPassword: (req, res) => {
         let { email } = req.body;
@@ -115,16 +113,14 @@ module.exports = {
                             success: false,
                             message: 'Error: Server error'
                         });
-                    } else {
-                        return res.status(200).send({
-                            success: true,
-                            message: `Success: Password reset to abcd1234`
-                        });
                     }
-
-                })
+                    return res.status(200).send({
+                        success: true,
+                        message: `Success: Password reset to abcd1234`
+                    });
+                });
             }
-        })
+        });
     },
     changePassword: (req, res) => {
         let {
@@ -139,45 +135,41 @@ module.exports = {
                     success: false,
                     message: "Error: There was a server error, please try again in a bit."
                 });
-            } else if (!user) {
+            }
+            if (!user) {
                 return res.status(404).send({
                     success: false,
                     message: "Error: Credentials are invalid."
                 });
-            } else {
-                var passwordIsValid = bcrypt.compareSync(old_password, user.password);
-                if (!passwordIsValid) {
-                    return res.status(401).send({
-                        success: false,
-                        message: "Error: Credentials are invalid."
-                    });
-                } else {
-                    let hashedPassword = bcrypt.hashSync(new_password, 8);
-
-                    let reset = {
-                        password: hashedPassword
-                    };
-
-                    Admin.update({ email }, reset, (err, user) => {
-                        if (err) {
-                            return res.status(500).send({
-                                success: false,
-                                message: 'Error: Server error'
-                            });
-                        } else {
-                            return res.status(200).send({
-                                success: true,
-                                message: 'Success: Password has been successfully reset.'
-                            })
-                        }
-                    })
-                }
             }
-        })
+            var passwordIsValid = bcrypt.compareSync(old_password, user.password);
+            if (!passwordIsValid) {
+                return res.status(401).send({
+                    success: false,
+                    message: "Error: Credentials are invalid."
+                });
+            } else {
+                let reset = {
+                    password: bcrypt.hashSync(new_password, 8)
+                };
+
+                Admin.update({ email }, reset, (err, user) => {
+                    if (err) {
+                        return res.status(500).send({
+                            success: false,
+                            message: 'Error: Server error'
+                        });
+                    }
+                    return res.status(200).send({
+                        success: true,
+                        message: 'Success: Password has been successfully reset.'
+                    });
+                });
+            }
+        });
     },
     changeEmail: (req, res) => {
         let { _id, email } = req.body;
-
         let update = {
             email
         };
@@ -188,12 +180,11 @@ module.exports = {
                     success: false,
                     message: "Error: There was a server error, please try again in a bit."
                 });
-            } else {
-                return res.status(200).send({
-                    success: true,
-                    message: 'Success: Email has been successfully changed.'
-                })
             }
-        })
+            return res.status(200).send({
+                success: true,
+                message: 'Success: Email has been successfully changed.'
+            });
+        });
     }
 };

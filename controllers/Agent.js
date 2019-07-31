@@ -18,9 +18,9 @@ module.exports = {
                     success: true,
                     agent,
                     message: "Sucess: Agents successfully received."
-                })
+                });
             }
-        })
+        });
     },
     /**
      |--------------------------------------------------
@@ -46,9 +46,9 @@ module.exports = {
                 return res.status(200).send({
                     success: true,
                     message: "Sucess: Agent Proposal successfully created."
-                })
+                });
             }
-        })
+        });
     },
     /**
      |--------------------------------------------------
@@ -76,9 +76,9 @@ module.exports = {
                 return res.status(200).send({
                     success: true,
                     message: "Sucess: Agent successfully approved."
-                })
+                });
             }
-        })
+        });
     },
     /**
      |--------------------------------------------------
@@ -106,8 +106,8 @@ module.exports = {
                 return res.status(200).send({
                     success: true,
                     message: "Sucess: Agent successfully declined."
-                })
+                });
             }
-        })
+        });
     }
 };

@@ -13,9 +13,9 @@ module.exports = {
                     success: true,
                     types,
                     message: "Success: Types received"
-                })
+                });
             }
-        })
+        });
     },
     create: (req, res) => {
         let {
@@ -38,9 +38,9 @@ module.exports = {
                 return res.status(200).send({
                     success: true,
                     message: `Success: Successfully created a new Type.`
-                })
+                });
             }
-        })
+        });
     },
     toggle: (req, res) => {
         let {
@@ -62,8 +62,8 @@ module.exports = {
                 return res.status(200).send({
                     success: true,
                     message: "Success: Successfully toggled the type status."
-                })
+                });
             }
-        })
+        });
     }
 };

@@ -13,9 +13,9 @@ module.exports = {
                     success: true,
                     banks,
                     message: "Success: Banks received"
-                })
+                });
             }
-        })
+        });
     },
     create: (req, res) => {
         let {
@@ -38,9 +38,9 @@ module.exports = {
                 return res.status(200).send({
                     success: true,
                     message: "Success: Successfully created the bank."
-                })
+                });
             }
-        })
+        });
     },
     /**
      |--------------------------------------------------
@@ -68,8 +68,8 @@ module.exports = {
                 return res.status(200).send({
                     success: true,
                     message: "Success: Successfully toggled the bank status."
-                })
+                });
             }
-        })
+        });
     }
 };

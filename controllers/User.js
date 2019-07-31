@@ -16,9 +16,9 @@ module.exports = {
                     success: true,
                     users,
                     message: "Success: Users received"
-                })
+                });
             }
-        })
+        });
     },
     register: (req, res) => {
         let {
@@ -52,9 +52,9 @@ module.exports = {
                     success: true,
                     user: user,
                     message: "Success: Successfully created your account."
-                })
+                });
             }
-        })
+        });
     },
     login: (req, res) => {
         let { email, password } = req.body;
@@ -82,9 +82,9 @@ module.exports = {
                     token: token,
                     user: user,
                     message: "Success: Successful login."
-                })
+                });
             }
-        })
+        });
     },
     createTempPassword: (req, res) => {
         let { email } = req.body;
@@ -113,11 +113,11 @@ module.exports = {
                         return res.status(200).send({
                             success: true,
                             message: `Success: Password reset to abcd1234`
-                        })
+                        });
                     }
-                })
+                });
             }
-        })
+        });
     },
     resetPassword: (req, res) => {
         let { email, temp_password, new_password } = req.body;
@@ -153,12 +153,12 @@ module.exports = {
                             return res.status(200).send({
                                 success: true,
                                 message: 'Success: Password has been successfully reset.'
-                            })
+                            });
                         }
-                    })
+                    });
                 }
             }
-        })
+        });
     },
     updatePushToken: (req, res) => {
         let {
@@ -187,10 +187,10 @@ module.exports = {
                     return res.status(200).send({
                         success: true,
                         message: "Success: User Push Token Successfully Updated."
-                    })
-                })
+                    });
+                });
             }
-        })
+        });
     },
     removePushToken: (req, res) => {
         let { email } = req.body;
@@ -216,10 +216,10 @@ module.exports = {
                     return res.status(200).send({
                         success: true,
                         message: "Success: User Push Token Successfully Removed"
-                    })
-                })
+                    });
+                });
             }
-        })
+        });
     },
     getById: (req, res) => {
         let { _id } = req.body;
@@ -235,9 +235,9 @@ module.exports = {
                     success: true,
                     user,
                     message: "Success: Succesfully received user information"
-                })
+                });
             }
-        })
+        });
     },
     verify: (req, res) => {
         let { email } = req.body;
@@ -254,7 +254,7 @@ module.exports = {
                 success: true,
                 user: user,
                 message: "Success: User successfully verified"
-            })
-        })
+            });
+        });
     }
 };

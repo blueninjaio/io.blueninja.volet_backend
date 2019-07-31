@@ -13,9 +13,9 @@ module.exports = {
                     success: true,
                     currency,
                     message: "Success: Currency received"
-                })
+                });
             }
-        })
+        });
     },
     create: (req, res) => {
         let {
@@ -38,9 +38,9 @@ module.exports = {
                 return res.status(200).send({
                     success: true,
                     message: "Success: Successfully created the currency."
-                })
+                });
             }
-        })
+        });
     },
     toggle: (req, res) => {
         let {
@@ -62,8 +62,8 @@ module.exports = {
                 return res.status(200).send({
                     success: true,
                     message: "Success: Successfully toggled the currency status."
-                })
+                });
             }
-        })
+        });
     }
 };

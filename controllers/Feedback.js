@@ -13,9 +13,9 @@ module.exports = {
                     success: true,
                     feedbacks,
                     message: "Success: Feedbacks received"
-                })
+                });
             }
-        })
+        });
     },
     create: (req, res) => {
         let {
@@ -40,8 +40,8 @@ module.exports = {
                 return res.status(200).send({
                     success: true,
                     message: "Success: Successfully created the feedback."
-                })
+                });
             }
-        })
+        });
     }
 };

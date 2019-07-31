@@ -18,9 +18,9 @@ module.exports = {
                     success: true,
                     businesses,
                     message: "Success: Businesses received"
-                })
+                });
             }
-        })
+        });
     },
     register: (req, res) => {
         let {
@@ -125,9 +125,9 @@ module.exports = {
                     success: true,
                     business,
                     message: "Success: Successfully created the business request."
-                })
+                });
             }
-        })
+        });
 
     },
     registrationInformation: async (req, res) => {
@@ -141,7 +141,7 @@ module.exports = {
                     message: "Server Error"
                 });
             } else {
-                info.currency = currency
+                info.currency = currency;
             }
         });
 
@@ -152,7 +152,7 @@ module.exports = {
                     message: "Server Error"
                 });
             } else {
-                info.payment_method = payment_method
+                info.payment_method = payment_method;
             }
         });
 
@@ -163,7 +163,7 @@ module.exports = {
                     message: "Server Error"
                 });
             } else {
-                info.bank = bank
+                info.bank = bank;
             }
         });
 
@@ -174,7 +174,7 @@ module.exports = {
                     message: "Server Error"
                 });
             } else {
-                info.business_category = business_category
+                info.business_category = business_category;
             }
         });
 
@@ -185,7 +185,7 @@ module.exports = {
                     message: "Server Error"
                 });
             } else {
-                info.business_type = business_type
+                info.business_type = business_type;
             }
         });
 
@@ -193,7 +193,7 @@ module.exports = {
             success: true,
             info,
             message: "Success: Businesses registration information received"
-        })
+        });
     },
     approve: (req, res) => {
         let {
@@ -215,9 +215,9 @@ module.exports = {
                 return res.status(200).send({
                     success: true,
                     message: "Success: Business Approved."
-                })
+                });
             }
-        })
+        });
     },
     decline: (req, res) => {
         let {
@@ -240,9 +240,9 @@ module.exports = {
                     success: true,
                     business,
                     message: "Success: Business Declined."
-                })
+                });
             }
-        })
+        });
     },
     updateInfo: (req, res) => {
         let {
@@ -282,8 +282,8 @@ module.exports = {
                 return res.status(200).send({
                     success: true,
                     message: "Success: Business Information Updated."
-                })
+                });
             }
-        })
+        });
     }
 };

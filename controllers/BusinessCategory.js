@@ -14,9 +14,9 @@ module.exports = {
                     success: true,
                     categories,
                     message: "Success: Categories received"
-                })
+                });
             }
-        })
+        });
     },
     get: (req, res) => {
         let { name } = req.body;
@@ -39,11 +39,11 @@ module.exports = {
                             success: true,
                             business,
                             message: "Success: Retrieved Businesses with that Category"
-                        })
+                        });
                     }
-                })
+                });
             }
-        })
+        });
     },
     create: (req, res) => {
         let {
@@ -65,9 +65,9 @@ module.exports = {
                 return res.status(200).send({
                     success: true,
                     message: `Success: Successfully created new category.`
-                })
+                });
             }
-        })
+        });
     },
     toggle: (req, res) => {
         let {
@@ -89,8 +89,8 @@ module.exports = {
                 return res.status(200).send({
                     success: true,
                     message: "Success: Successfully toggled the category status."
-                })
+                });
             }
-        })
+        });
     }
 };

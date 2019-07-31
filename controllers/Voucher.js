@@ -14,9 +14,9 @@ module.exports = {
                     success: true,
                     vouchers,
                     message: "Success: Vouchers received"
-                })
+                });
             }
-        })
+        });
     },
     create: (req, res) => {
         let {
@@ -46,9 +46,9 @@ module.exports = {
                 return res.status(200).send({
                     success: true,
                     message: "Success: Successfully created the voucher."
-                })
+                });
             }
-        })
+        });
     },
     redeem: (req, res) => {
         let {
@@ -109,13 +109,13 @@ module.exports = {
                                     return res.status(200).send({
                                         success: true,
                                         message: "Success: Successfully redeemed Voucher."
-                                    })
+                                    });
                                 }
-                            })
+                            });
                         }
-                    })
+                    });
                 }
             }
-        })
+        });
     }
 };

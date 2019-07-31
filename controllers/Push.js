@@ -1,7 +1,7 @@
 const { Expo } = require('expo-server-sdk/build/ExpoClient');
 
 const Push = require('../models/Push');
-const User = require('../models/User')
+const User = require('../models/User');
 
 const expo = new Expo();
 
@@ -18,9 +18,9 @@ module.exports = {
                     success: true,
                     push: push,
                     message: "Push received"
-                })
+                });
             }
-        })
+        });
     },
     create: async (req, res) => {
         let {
@@ -49,10 +49,10 @@ module.exports = {
                                 to: x.push_token,
                                 title: title,
                                 body: description,
-                            })
+                            });
                         }
                     }
-                })
+                });
             }
         });
 
@@ -62,9 +62,9 @@ module.exports = {
             for (let chunk of chunks) {
                 try {
                     let ticketChunk = await expo.sendPushNotificationsAsync(chunk);
-                    tickets.push(...ticketChunk)
+                    tickets.push(...ticketChunk);
                 } catch (error) {
-                    console.error(error)
+                    console.error(error);
                 }
             }
         })();
@@ -80,7 +80,7 @@ module.exports = {
             return res.status(200).send({
                 success: true,
                 message: "Push notification was successfully created"
-            })
-        })
+            });
+        });
     }
 };

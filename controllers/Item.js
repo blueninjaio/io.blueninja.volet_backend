@@ -28,9 +28,9 @@ module.exports = {
                     success: true,
                     item,
                     message: "Success: Successfully added the item."
-                })
+                });
             }
-        })
+        });
     },
     remove: (req, res) => {
         let {
@@ -47,9 +47,9 @@ module.exports = {
                 return res.status(200).send({
                     success: true,
                     message: "Success: Successfully removed the item."
-                })
+                });
             }
-        })
+        });
     },
     /**
      |--------------------------------------------------
@@ -72,8 +72,8 @@ module.exports = {
                     success: true,
                     item,
                     message: "Success: Successfully received items of that business."
-                })
+                });
             }
-        })
+        });
     }
 };
