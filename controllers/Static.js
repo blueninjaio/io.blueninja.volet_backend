@@ -28,8 +28,8 @@ module.exports = {
                 });
             } else if (static.length < 1) {
                 let staticPage = {
-                    faq,
-                    policies: ''
+                    faq: faq,
+                    policies: policy
                 };
 
                 Static.create(staticPage, (err, static) => {
@@ -48,7 +48,7 @@ module.exports = {
                 });
             } else {
                 let update = {
-                    faq
+                    faq: faq
                 };
 
                 Static.updateOne({ "_id": static[0]._id }, update, (err, static) => {
@@ -68,7 +68,7 @@ module.exports = {
         });
     },
     editPolicies: (req, res) => {
-        let { policies } = req.body;
+        let { policy } = req.body;
 
         Static.find({}, (err, static) => {
             if (err) {
@@ -79,7 +79,7 @@ module.exports = {
             } else if (static.length < 1) {
                 let staticPage = {
                     faq: '',
-                    policies,
+                    policies: policy,
                 };
 
                 Static.create(staticPage, (err, static) => {
@@ -98,7 +98,7 @@ module.exports = {
                 });
             } else {
                 let update = {
-                    policies
+                    policies: policy
                 };
 
                 Static.updateOne({ "_id": static[0]._id }, update, (err, static) => {
