@@ -47,11 +47,13 @@ module.exports = {
     },
     create: (req, res) => {
         let {
-            name
+            name,
+            description
         } = req.body;
 
         let newCategory = {
             name,
+            description,
             isActive: true
         };
 
@@ -91,6 +93,30 @@ module.exports = {
                     message: "Success: Successfully toggled the category status."
                 });
             }
+        });
+    },
+    getView: (req, res) => {
+        Category.find({}, (err, categories) => {
+            if (err) {
+                return res.status(500).send({
+                    success: false,
+                    message: "Server Error"
+                });
+            }
+            Business.find({}, (err, businesses) => {
+                if (err) {
+                    return res.status(500).send({
+                        success: false,
+                        message: "Server Error"
+                    });
+                }
+                return res.status(200).send({
+                    success: true,
+                    categories,
+                    businesses,
+                    message: "Success: Categories received"
+                });
+            });
         });
     }
 };

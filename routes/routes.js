@@ -34,6 +34,7 @@ router.get('/business_category', businessCategoryController.getAll);
 router.post('/business_category/business', businessCategoryController.get);
 router.post('/business_category', businessCategoryController.create);
 router.post('/business_category/toggle', businessCategoryController.toggle);
+router.get('/business_category/view', businessCategoryController.getView);
 
 let businessTypeController = require('../controllers/BusinessType');
 router.get('/business_type', businessTypeController.getAll);
@@ -95,8 +96,8 @@ router.post('/volet', voletController.create);
 router.post('/volet/id', voletController.calculate);
 
 let voucherController = require('../controllers/Voucher');
-router.post('/', voucherController.getAll);
-router.post('/redeem', voucherController.redeem);
-router.get('/', voucherController.redeem);
+router.get('/vouchers', voucherController.getAll);
+router.post('/vouchers', voucherController.create);
+router.post('/vouchers/redeem', voucherController.redeem);
 
 module.exports = router;
