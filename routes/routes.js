@@ -28,13 +28,13 @@ router.get('/business/registrationInformation', businessController.registrationI
 router.post('/business/approve', businessController.approve);
 router.post('/business/decline', businessController.decline);
 router.post('/business/info', businessController.updateInfo);
+router.get('/business/getTypes', businessController.getTypes);
 
 let businessCategoryController = require('../controllers/BusinessCategory');
 router.get('/business_category', businessCategoryController.getAll);
 router.post('/business_category/business', businessCategoryController.get);
 router.post('/business_category', businessCategoryController.create);
 router.post('/business_category/toggle', businessCategoryController.toggle);
-router.get('/business_category/view', businessCategoryController.getView);
 
 let businessTypeController = require('../controllers/BusinessType');
 router.get('/business_type', businessTypeController.getAll);

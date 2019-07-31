@@ -4,6 +4,7 @@ const Bank = require('../models/Bank');
 const PaymentMethod = require('../models/PaymentMethod');
 const Category = require('../models/BusinessCategory');
 const Types = require('../models/BusinessType');
+const CategoryType = require('../models/CategoryType');
 
 module.exports = {
     getAll: (req, res) => {
@@ -24,6 +25,7 @@ module.exports = {
     },
     register: (req, res) => {
         let {
+            merchant_id,
             contact,
             f_name,
             l_name,
@@ -52,7 +54,7 @@ module.exports = {
 
 
         let newBusiness = {
-            merchant_id: merchant._id,
+            merchant_id: merchant_id,
             contact,
             f_name,
             l_name,
@@ -284,6 +286,30 @@ module.exports = {
                     message: "Success: Business Information Updated."
                 });
             }
+        });
+    },
+    getTypes: (req, res) => {
+        CategoryType.find({}, (err, categories) => {
+            if (err) {
+                return res.status(500).send({
+                    success: false,
+                    message: "Server Error"
+                });
+            }
+            Business.find({}, (err, businesses) => {
+                if (err) {
+                    return res.status(500).send({
+                        success: false,
+                        message: "Server Error"
+                    });
+                }
+                return res.status(200).send({
+                    success: true,
+                    categories,
+                    businesses,
+                    message: "Success: Categories received"
+                });
+            });
         });
     }
 };
