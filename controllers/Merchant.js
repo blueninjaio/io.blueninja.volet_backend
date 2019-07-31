@@ -21,6 +21,7 @@ module.exports = {
         });
     },
     register: (req, res) => {
+        console.log(req.body);
         let {
             contact,
             f_name,
@@ -33,11 +34,10 @@ module.exports = {
             contact,
             f_name,
             l_name,
-            email
+            email,
+            dateCreated: new Date()
         };
-
-        let hashedPassword = bcrypt.hashSync(password, 8);
-        newMerchant.password = hashedPassword;
+        newMerchant.password = bcrypt.hashSync(password, 8);
 
 
         Merchant.create(newMerchant, (err, merchant) => {

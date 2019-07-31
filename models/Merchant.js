@@ -6,6 +6,7 @@ const schema = new mongoose.Schema({
     email: String,
     password: String,
     push_token: String,
+    dateCreated: String
 });
 
 const model = mongoose.model('Merchant', schema);
