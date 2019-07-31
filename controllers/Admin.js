@@ -24,12 +24,10 @@ module.exports = {
             email,
             password
         } = req.body;
-
-        let newUser = {};
-        let hashedPassword = bcrypt.hashSync(password, 8);
-        newUser.email = email;
-        newUser.password = hashedPassword;
-
+        let newUser = {
+            email: email,
+            password: bcrypt.hashSync(password, 8)
+        };
         Admin.create(newUser, (err, user) => {
             if (err) {
                 return res.status(500).send({
@@ -53,27 +51,30 @@ module.exports = {
                     success: false,
                     message: "Error: Server Error"
                 });
-            } else {
-                var passwordIsValid = bcrypt.compareSync(password, user.password);
-                if (!passwordIsValid) {
-                    return res.status(401).send({
-                        success: false,
-                        message: "Error: Wrong Password Entered"
-                    });
-                }
-
-                var token = jwt.sign({ email }, config.secret, {
-                    expiresIn: 43200
-                });
-
-                return res.status(200).send({
-                    success: true,
-                    token: token,
-                    user,
-                    message: "Success: Successful login"
-                })
             }
-        })
+            if (!user) {
+                return res.status(500).send({
+                    success: false,
+                    message: "Error: User not found."
+                });
+            }
+            let passwordIsValid = bcrypt.compareSync(password, user.password);
+            if (!passwordIsValid) {
+                return res.status(401).send({
+                    success: false,
+                    message: "Error: Wrong Password Entered"
+                });
+            }
+            let token = jwt.sign({ email }, config.secret, {
+                expiresIn: 43200
+            });
+            return res.status(200).send({
+                success: true,
+                token: token,
+                user,
+                message: "Success: Successful login"
+            });
+        });
     },
     verifyUser: (req, res) => {
         let { email } = req.body;
@@ -102,8 +103,7 @@ module.exports = {
                     message: "Error: There was a server error, please try again in a bit."
                 });
             } else {
-                let uniqueKey = 'abcd1234';
-                let password = uniqueKey;
+                let password = 'abcd1234';
                 let hashedPassword = bcrypt.hashSync(password, 8);
 
                 let update = {};
