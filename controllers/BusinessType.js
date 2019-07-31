@@ -19,11 +19,13 @@ module.exports = {
     },
     create: (req, res) => {
         let {
-            name
+            name,
+            description
         } = req.body;
 
         let newType = {
-            name
+            name,
+            description
         };
 
         Type.create(newType, (err, type) => {
