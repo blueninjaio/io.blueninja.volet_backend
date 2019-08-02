@@ -79,6 +79,14 @@ router.get('/static', staticController.getAll);
 router.post('/static/faq', staticController.editFaq);
 router.post('/static/policies', staticController.editPolicies);
 
+let transactionController = require('../controllers/Transaction');
+router.get('/transaction/user', transactionController.getAllUserTransactions);
+router.get('/transaction/userAgent', transactionController.getAllUserAgentTransactions);
+router.get('/transaction/merchant', transactionController.getAllMerchantTransactions);
+router.post('/transaction/user', transactionController.createUserTransaction);
+router.post('/transaction/userAgent', transactionController.createUserAgentTransaction);
+router.post('/transaction/merchant', transactionController.createMerchantTransaction);
+
 let userController = require('../controllers/User');
 router.get('/users', userController.getAll);
 router.post('/users/id', userController.getById);
