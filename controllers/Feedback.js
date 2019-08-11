@@ -27,7 +27,8 @@ module.exports = {
         let newFeedback = {
             user_id,
             rating,
-            description
+            description,
+            dateCreated: new Date()
         };
 
         Feedback.create(newFeedback, (err, feedback) => {
