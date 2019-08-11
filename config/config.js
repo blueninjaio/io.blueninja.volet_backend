@@ -13,5 +13,6 @@ module.exports = {
         uri: mongoUri,
         options: { useNewUrlParser: true }
     },
-    secret: 'blueninja'
+    secret: 'blueninja',
+    currency_api_key: 'bbdef8c657174ac8bd18'
 };

@@ -1,4 +1,9 @@
 const Currency = require('../models/Currency');
+const request = require('request-promise-native');
+const {currency_api_key} = require('../config/config');
+
+const requestConversion = (from, to) => {
+}
 
 module.exports = {
     getAll: (req, res) => {
@@ -65,5 +70,30 @@ module.exports = {
                 });
             }
         });
-    }
+    },
+    convert: async (req, res) => {
+        let {
+            from,
+            to
+        } = req.body;
+        if (!from || !to) {
+            return res.status(400).send({
+                success: false,
+                message: "Error: Missing fields."
+            });
+        }
+        let token = `${from}_${to}`;
+        try {
+            let result = JSON.parse(await request(`https://free.currconv.com/api/v7/convert?q=${token}&compact=ultra&apiKey=${currency_api_key}`));
+            return res.status(200).send({
+                success: true,
+                conversion: result[token.toUpperCase()]
+            });
+        } catch (e) {
+            return res.status(400).send({
+                success: false,
+                message: "Error: Could not convert currency."
+            });
+        }
+    },
 };

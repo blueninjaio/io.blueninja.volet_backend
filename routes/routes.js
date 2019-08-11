@@ -45,6 +45,7 @@ let currencyController = require('../controllers/Currency');
 router.post('/currency', currencyController.create);
 router.get('/currency', currencyController.getAll);
 router.post('/currency/toggle', currencyController.toggle);
+router.post('/currency/convert', currencyController.convert);
 
 let feedbackController = require('../controllers/Feedback');
 router.get('/feedbacks', feedbackController.getAll);
