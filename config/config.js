@@ -1,6 +1,6 @@
 let port;
 let mongoUri;
-if (process.env.dev) {
+if (process.env.NODE_ENV === "dev") {
     port = 8080;
     mongoUri = 'mongodb://localhost:27017/volet';
 } else {
