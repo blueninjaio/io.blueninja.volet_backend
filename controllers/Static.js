@@ -1,120 +1,38 @@
 const Static = require('../models/Static');
 
+edit = async (res, faq, policy) => {
+    let _static = await Static.find({});
+    if (_static.length < 1) {
+        let staticPage = {
+            faq: faq,
+            policies: policy
+        };
+
+        _static = Static.create(staticPage);
+        return res.ok('Successfully created FAQ Static Page.', {
+            static: _static
+        });
+    }
+    let update = {
+        faq: faq
+    };
+    await Static.updateOne({ '_id': _static[0]._id }, update);
+    return res.ok('Successfully edited FAQ Static Page.');
+};
+
 module.exports = {
-    getAll: (req, res) => {
-        Static.find({}, (err, static) => {
-            if (err) {
-                return res.status(500).send({
-                    success: false,
-                    message: "Server Error"
-                });
-            }
-
-            return res.status(200).send({
-                success: true,
-                static,
-                message: "Static Pages Received"
-            });
+    getAll: async (req, res) => {
+        let _static = await Static.find({});
+        return res.ok('Static Pages Received', {
+            static: _static
         });
     },
-    editFaq: (req, res) => {
+    editFaq: async (req, res) => {
         let { faq } = req.body;
-
-        Static.find({}, (err, static) => {
-            if (err) {
-                return res.status(500).send({
-                    success: false,
-                    message: "Server Error"
-                });
-            } else if (static.length < 1) {
-                let staticPage = {
-                    faq: faq,
-                    policies: policy
-                };
-
-                Static.create(staticPage, (err, static) => {
-                    if (err) {
-                        return res.status(500).send({
-                            success: false,
-                            message: "Error: There was an error creating the FAQ Static Page. Please try again in a bit."
-                        });
-                    } else {
-                        return res.status(200).send({
-                            success: true,
-                            static,
-                            message: "Success: Successfully created FAQ Static Page."
-                        });
-                    }
-                });
-            } else {
-                let update = {
-                    faq: faq
-                };
-
-                Static.updateOne({ "_id": static[0]._id }, update, (err, static) => {
-                    if (err) {
-                        return res.send({
-                            success: false,
-                            message: 'Error: Server error'
-                        });
-                    }
-
-                    return res.status(200).send({
-                        success: true,
-                        message: "Success: Successfully edited FAQ Static Page."
-                    });
-                });
-            }
-        });
+        return await edit(req, faq, '');
     },
-    editPolicies: (req, res) => {
+    editPolicies: async (req, res) => {
         let { policy } = req.body;
-
-        Static.find({}, (err, static) => {
-            if (err) {
-                return res.status(500).send({
-                    success: false,
-                    message: "Server Error"
-                });
-            } else if (static.length < 1) {
-                let staticPage = {
-                    faq: '',
-                    policies: policy,
-                };
-
-                Static.create(staticPage, (err, static) => {
-                    if (err) {
-                        return res.status(500).send({
-                            success: false,
-                            message: "Error: There was an error creating the Policies Static Page. Please try again in a bit."
-                        });
-                    } else {
-                        return res.status(200).send({
-                            success: true,
-                            static,
-                            message: "Success: Successfully created Policies Static Page."
-                        });
-                    }
-                });
-            } else {
-                let update = {
-                    policies: policy
-                };
-
-                Static.updateOne({ "_id": static[0]._id }, update, (err, static) => {
-                    if (err) {
-                        return res.send({
-                            success: false,
-                            message: 'Error: Server error'
-                        });
-                    }
-
-                    return res.status(200).send({
-                        success: true,
-                        message: "Success: Successfully edited Policies Static Page."
-                    });
-                });
-            }
-        });
+        return await edit(req, '', policy);
     }
 };

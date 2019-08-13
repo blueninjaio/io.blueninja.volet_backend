@@ -1,28 +1,14 @@
 const Volet = require('../models/Volet');
 
 module.exports = {
-    getAll: (req, res) => {
-        Volet.find({}, (err, volets) => {
-            if (err) {
-                return res.status(500).send({
-                    success: false,
-                    message: "Server Error"
-                });
-            } else {
-                return res.status(200).send({
-                    success: true,
-                    volets,
-                    message: "Success: Volets received"
-                });
-            }
+    getAll: async (req, res) => {
+        let volets = await Volet.find({});
+        return res.ok('Volets received', {
+            volets: volets
         });
     },
-    create: (req, res) => {
-        let {
-            persona_id,
-            persona_model,
-            amount,
-        } = req.body;
+    create: async (req, res) => {
+        let { persona_id, persona_model, amount } = req.body;
 
 
         let newVolet = {
@@ -31,38 +17,15 @@ module.exports = {
             amount
         };
 
-        Volet.create(newVolet, (err, volet) => {
-            if (err) {
-                return res.status(404).send({
-                    success: false,
-                    message: "Error: There was an error creating the volet."
-                });
-            } else {
-                return res.status(200).send({
-                    success: true,
-                    message: "Success: Successfully created the volet."
-                });
-            }
-        });
+        await Volet.create(newVolet);
+        return res.ok('Successfully created the volet.');
     },
-    calculate: (req, res) => {
-        let {
-            persona_id,
-        } = req.body;
+    calculate: async (req, res) => {
+        let { persona_id } = req.body;
 
-        Volet.find({ persona_id }, (err, volet) => {
-            if (err) {
-                return res.status(404).send({
-                    success: false,
-                    message: "Error: There was an error creating the volet."
-                });
-            } else {
-                return res.status(200).send({
-                    success: true,
-                    volet,
-                    message: "Success: Successfully received volet of Persona."
-                });
-            }
+        let volet = await Volet.find({ persona_id });
+        return res.ok('Successfully received volet of Persona.', {
+            volet: volet
         });
     }
 };

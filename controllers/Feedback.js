@@ -1,28 +1,14 @@
 const Feedback = require('../models/Feedback');
 
 module.exports = {
-    getAll: (req, res) => {
-        Feedback.find({}, (err, feedbacks) => {
-            if (err) {
-                return res.status(500).send({
-                    success: false,
-                    message: "Server Error"
-                });
-            } else {
-                return res.status(200).send({
-                    success: true,
-                    feedbacks,
-                    message: "Success: Feedbacks received"
-                });
-            }
+    getAll: async (req, res) => {
+        let feedbacks = await Feedback.find({});
+        return res.ok('Feedbacks received', {
+            feedbacks: feedbacks
         });
     },
-    create: (req, res) => {
-        let {
-            user_id,
-            rating,
-            description
-        } = req.body;
+    create: async (req, res) => {
+        let { user_id, rating, description } = req.body;
 
         let newFeedback = {
             user_id,
@@ -31,18 +17,7 @@ module.exports = {
             dateCreated: new Date()
         };
 
-        Feedback.create(newFeedback, (err, feedback) => {
-            if (err) {
-                return res.status(404).send({
-                    success: false,
-                    message: "Error: There was an error creating the feedback."
-                });
-            } else {
-                return res.status(200).send({
-                    success: true,
-                    message: "Success: Successfully created the feedback."
-                });
-            }
-        });
+        await Feedback.create(newFeedback);
+        return res.ok('Successfully created the feedback.');
     }
 };

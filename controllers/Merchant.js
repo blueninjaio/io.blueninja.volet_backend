@@ -4,236 +4,124 @@ const Merchant = require('../models/Merchant');
 const config = require('../config/config');
 
 module.exports = {
-    getAll: (req, res) => {
-        Merchant.find({}, (err, merchants) => {
-            if (err) {
-                return res.status(500).send({
-                    success: false,
-                    message: "Server Error"
-                });
-            } else {
-                return res.status(200).send({
-                    success: true,
-                    merchants,
-                    message: "Success: Merchants received"
-                });
-            }
+    getAll: async (req, res) => {
+        let merchants = await Merchant.find({});
+        return res.ok('Merchants received', {
+            merchants: merchants
         });
     },
-    register: (req, res) => {
-        console.log(req.body);
-        let {
-            contact,
-            f_name,
-            l_name,
-            email,
-            password,
-        } = req.body;
+    register: async (req, res) => {
+        let { contact, f_name, l_name, email, password } = req.body;
 
         let newMerchant = {
             contact,
             f_name,
             l_name,
             email,
-            dateCreated: new Date()
+            dateCreated: new Date(),
+            password: bcrypt.hashSync(password, 8)
         };
-        newMerchant.password = bcrypt.hashSync(password, 8);
 
 
-        Merchant.create(newMerchant, (err, merchant) => {
-            if (err) {
-                return res.status(500).send({
-                    success: false,
-                    message: "Error: There was an error adding you. Please try again in a bit."
-                });
-            } else {
-                return res.status(200).send({
-                    success: true,
-                    merchant,
-                    message: "Success: Successfully created your account."
-                });
-            }
+        let merchant = await Merchant.create(newMerchant);
+        return res.ok('Successfully created your account.', {
+            merchant: merchant
         });
     },
-    login: (req, res) => {
+    login: async (req, res) => {
         let { email, password } = req.body;
 
-        Merchant.findOne({ email }, (err, merchant) => {
-            if (err) {
-                return res.status(500).send({
-                    success: false,
-                    message: "Error: There was a server error, please try again in a bit."
-                });
-            } else {
-                var passwordIsValid = bcrypt.compareSync(password, merchant.password);
-                if (!passwordIsValid) {
-                    return res.status(401).send({
-                        success: false,
-                        message: "Error: Credentials are invalid."
-                    });
-                }
+        let merchant = await Merchant.findOne({ email });
+        if (!merchant) {
+            return res.unauthorized();
+        }
+        let passwordIsValid = bcrypt.compareSync(password, merchant.password);
+        if (!passwordIsValid) {
+            return res.unauthorized();
+        }
 
-                var token = jwt.sign({ email }, config.secret, {
-                    expiresIn: 43200
-                });
+        let token = jwt.sign({ email }, config.secret, {
+            expiresIn: 43200
+        });
 
-                return res.status(200).send({
-                    success: true,
-                    token: token,
-                    merchant,
-                    message: "Success: Successful login."
-                });
-            }
+        return res.ok('Successful login.', {
+            token: token,
+            merchant: merchant
         });
     },
-    createTempPassword: (req, res) => {
+    createTempPassword: async (req, res) => {
         let { email } = req.body;
 
-        Merchant.findOne({ email }, (err, merchant) => {
-            if (err) {
-                return res.status(500).send({
-                    success: false,
-                    message: "Error: There was a server error, please try again in a bit."
-                });
-            } else {
-                let uniqueKey = 'abcd1234';
-                let password = uniqueKey;
-                let hashedPassword = bcrypt.hashSync(password, 8);
+        let merchant = await Merchant.findOne({ email });
+        if (!merchant) {
+            return res.bad_request('Merchant not found.');
+        }
+        let uniqueKey = 'abcd1234';
+        let password = uniqueKey;
+        let hashedPassword = bcrypt.hashSync(password, 8);
 
-                let update = {};
-                update.password = hashedPassword;
+        let update = {};
+        update.password = hashedPassword;
 
-                Merchant.updateOne({ email }, update, (err, updatedMerchant) => {
-                    if (err) {
-                        return res.send({
-                            success: false,
-                            message: 'Error: Server error'
-                        });
-                    } else {
-                        return res.status(200).send({
-                            success: true,
-                            message: `Success: Password reset to abcd1234`
-                        });
-                    }
-                });
-            }
-        });
+        await Merchant.updateOne({ email }, update);
+        return res.ok(`Password reset to abcd1234`);
     },
-    resetPassword: (req, res) => {
+    resetPassword: async (req, res) => {
         let { email, temp_password, new_password } = req.body;
 
-        Merchant.findOne({ email }, (err, merchant) => {
-            if (err) {
-                return res.status(500).send({
-                    success: false,
-                    message: "Error: There was a server error, please try again in a bit."
-                });
-            } else {
-                var passwordIsValid = bcrypt.compareSync(temp_password, merchant.password);
-                if (!passwordIsValid) {
-                    return res.status(401).send({
-                        success: false,
-                        message: "Error: Credentials are invalid."
-                    });
-                } else {
-                    let hashedPassword = bcrypt.hashSync(new_password, 8);
+        let merchant = await Merchant.findOne({ email });
+        if (!merchant) {
+            return res.bad_request('Merchant not found.');
+        }
+        let passwordIsValid = bcrypt.compareSync(temp_password, merchant.password);
+        if (!passwordIsValid) {
+            return res.unauthorized('Credentials are invalid.');
+        }
+        let hashedPassword = bcrypt.hashSync(new_password, 8);
 
-                    let reset = {
-                        tempPassword: false,
-                        password: hashedPassword
-                    };
+        let reset = {
+            tempPassword: false,
+            password: hashedPassword
+        };
 
-                    Merchant.update({ email }, reset, (err, merchant) => {
-                        if (err) {
-                            return res.status(500).send({
-                                success: false,
-                                message: 'Error: Server error'
-                            });
-                        } else {
-                            return res.status(200).send({
-                                success: true,
-                                message: 'Success: Password has been successfully reset.'
-                            });
-                        }
-                    });
-                }
-            }
-        });
+        await Merchant.update({ email }, reset);
+        return res.ok('Password has been successfully reset.');
     },
-    updatePushToken: (req, res) => {
+    updatePushToken: async (req, res) => {
         let { email, token } = req.body;
 
-        Merchant.findOne({ email }, (err, user) => {
-            if (err) {
-                return res.status(500).send({
-                    success: false,
-                    message: "Error: There was an error finding the user with that email"
-                });
-            } else {
-                let update = {};
-                update.push_token = token;
-
-                Merchant.updateOne({ email }, update, (err, user) => {
-                    if (err) {
-                        return res.status(500).send({
-                            success: false,
-                            message: 'Error: Server error'
-                        });
-                    }
-
-                    return res.status(200).send({
-                        success: true,
-                        message: "Success: User Push Token Successfully Updated."
-                    });
-                });
-            }
-        });
+        let merchant = await Merchant.findOne({ email });
+        if (!merchant) {
+            return res.bad_request('Merchant not found.');
+        }
+        let update = {
+            push_token: token
+        };
+        await Merchant.updateOne({ email }, update);
+        return res.ok('User Push Token Successfully Updated.');
     },
-    removePushToken: (req, res) => {
+    removePushToken: async (req, res) => {
         let { email } = req.body;
+        let merchant = await Merchant.findOne({ email });
+        if (!merchant) {
+            return res.bad_request('Merchant not found.');
+        }
+        let update = {
+            push_token: ''
+        };
 
-        Merchant.findOne({ email }, (err, user) => {
-            if (err) {
-                return res.status(500).send({
-                    success: false,
-                    message: "Server Error"
-                });
-            } else {
-                let update = {};
-                update.push_token = '';
-
-                Merchant.updateOne({ email }, update, (err, user) => {
-                    if (err) {
-                        return res.status(500).send({
-                            success: false,
-                            message: 'Error: Server error'
-                        });
-                    }
-
-                    return res.status(200).send({
-                        success: true,
-                        message: "Success: User Push Token Successfully Removed"
-                    });
-                });
-            }
-        });
+        await Merchant.updateOne({ email }, update);
+        return res.ok('User Push Token Successfully Removed');
     },
-    getById: (req, res) => {
+    getById: async (req, res) => {
         let { _id } = req.body;
 
-        Merchant.findOne({ _id }, (err, merchant) => {
-            if (err) {
-                return res.status(500).send({
-                    success: false,
-                    message: "Server Error"
-                });
-            } else {
-                return res.status(200).send({
-                    success: true,
-                    merchant,
-                    message: "Success: Succesfully received user information"
-                });
-            }
+        let merchant = await Merchant.findOne({ _id });
+        if (!merchant) {
+            return res.bad_request('Merchant not found.');
+        }
+        return res.ok('Succesfully received user information', {
+            merchant: merchant
         });
     }
 };

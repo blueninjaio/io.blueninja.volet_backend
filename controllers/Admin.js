@@ -4,187 +4,87 @@ const Admin = require('../models/Admin');
 const config = require('../config/config');
 
 module.exports = {
-    getAll: (req, res) => {
-        Admin.find({}, (err, users) => {
-            if (err) {
-                return res.status(500).send({
-                    success: false,
-                    message: "Server Error"
-                });
-            }
-            return res.status(200).send({
-                success: true,
-                users: users,
-                message: "Success: Admins received"
-            });
+    getAll: async (req, res) => {
+        let users = await Admin.find({});
+        return res.ok('Admins received', {
+            users: users
         });
     },
-    create: (req, res) => {
-        let {
-            email,
-            password
-        } = req.body;
+    create: async (req, res) => {
+        let { email, password } = req.body;
+
         let newUser = {
             email: email,
             password: bcrypt.hashSync(password, 8)
         };
-        Admin.create(newUser, (err, user) => {
-            if (err) {
-                return res.status(500).send({
-                    success: false,
-                    message: "Erro: There was a problem adding the Admin"
-                });
-            }
-            return res.status(200).send({
-                success: true,
-                message: `Success: Admin was successfully created`
-            });
-        });
+        let user = await Admin.findOne({ email });
+        if (user) {
+            return res.bad_request('Email has already been registered.');
+        }
+        await Admin.create(newUser);
+        return res.ok(`Admin was successfully created`);
     },
-    login: (req, res) => {
+    login: async (req, res) => {
         let { email, password } = req.body;
 
-        Admin.findOne({ email }, (err, user) => {
-            if (err) {
-                return res.status(500).send({
-                    success: false,
-                    message: "Error: Server Error"
-                });
-            }
-            if (!user) {
-                return res.status(500).send({
-                    success: false,
-                    message: "Error: User not found."
-                });
-            }
-            let passwordIsValid = bcrypt.compareSync(password, user.password);
-            if (!passwordIsValid) {
-                return res.status(401).send({
-                    success: false,
-                    message: "Error: Wrong Password Entered"
-                });
-            }
-            let token = jwt.sign({ email }, config.secret, {
-                expiresIn: 43200
-            });
-            return res.status(200).send({
-                success: true,
-                token: token,
-                user,
-                message: "Success: Successful login"
-            });
+        let user = await Admin.findOne({ email });
+        if (!user || !bcrypt.compareSync(password, user.password)) {
+            return res.bad_request('Invalid login credentials.');
+        }
+        let token = jwt.sign({ email }, config.secret, {
+            expiresIn: 43200
+        });
+        return res.ok('Successful login', {
+            token: token,
+            user: user,
         });
     },
-    verifyUser: (req, res) => {
-        let { email } = req.body;
-        Admin.findOne({ email }, (err, user) => {
-            if (err) {
-                return res.status(500).send({
-                    success: false,
-                    message: "Server Error"
-                });
-            }
-            return res.status(200).send({
-                success: true,
-                user: user,
-                message: "Success: User verified"
-            });
-        });
-    },
-    forgotPassword: (req, res) => {
+    verifyUser: async (req, res) => {
         let { email } = req.body;
 
-        Admin.findOne({ email }, (err, user) => {
-            if (err) {
-                return res.status(500).send({
-                    success: false,
-                    message: "Error: There was a server error, please try again in a bit."
-                });
-            } else {
-                let password = 'abcd1234';
-                let hashedPassword = bcrypt.hashSync(password, 8);
-
-                let update = {};
-                update.password = hashedPassword;
-
-                Admin.updateOne({ email }, update, (err, updatedUser) => {
-                    if (err) {
-                        return res.send({
-                            success: false,
-                            message: 'Error: Server error'
-                        });
-                    }
-                    return res.status(200).send({
-                        success: true,
-                        message: `Success: Password reset to abcd1234`
-                    });
-                });
-            }
+        let user = await Admin.findOne({ email });
+        if (!user) {
+            return res.bad_request('No user found with that email.');
+        }
+        return res.ok('User verified', {
+            user: user
         });
     },
-    changePassword: (req, res) => {
-        let {
-            email,
-            old_password,
-            new_password
-        } = req.body;
+    forgotPassword: async (req, res) => {
+        let { email } = req.body;
 
-        Admin.findOne({ email }, (err, user) => {
-            if (err) {
-                return res.status(500).send({
-                    success: false,
-                    message: "Error: There was a server error, please try again in a bit."
-                });
-            }
-            if (!user) {
-                return res.status(404).send({
-                    success: false,
-                    message: "Error: Credentials are invalid."
-                });
-            }
-            var passwordIsValid = bcrypt.compareSync(old_password, user.password);
-            if (!passwordIsValid) {
-                return res.status(401).send({
-                    success: false,
-                    message: "Error: Credentials are invalid."
-                });
-            } else {
-                let reset = {
-                    password: bcrypt.hashSync(new_password, 8)
-                };
-
-                Admin.update({ email }, reset, (err, user) => {
-                    if (err) {
-                        return res.status(500).send({
-                            success: false,
-                            message: 'Error: Server error'
-                        });
-                    }
-                    return res.status(200).send({
-                        success: true,
-                        message: 'Success: Password has been successfully reset.'
-                    });
-                });
-            }
-        });
+        let user = await Admin.findOne({ email });
+        if (!user) {
+            return res.bad_request('No user found with that email.');
+        }
+        let password = 'abcd1234';
+        let hashedPassword = bcrypt.hashSync(password, 8);
+        let update = {
+            password: hashedPassword
+        };
+        await Admin.updateOne({ email }, update);
+        return res.ok(`Password reset to ` + password);
     },
-    changeEmail: (req, res) => {
+    changePassword: async (req, res) => {
+        let { email, old_password, new_password } = req.body;
+
+        let user = await Admin.findOne({ email });
+        if (!user || !bcrypt.compareSync(old_password, user.password)) {
+            return res.bad_request('Invalid credentials.');
+        }
+        let reset = {
+            password: bcrypt.hashSync(new_password, 8)
+        };
+        await Admin.update({ email }, reset);
+        return res.ok('Password has been successfully reset.');
+    },
+    changeEmail: async (req, res) => {
         let { _id, email } = req.body;
+
         let update = {
             email
         };
-
-        Admin.updateOne({ _id }, update, (err, user) => {
-            if (err) {
-                return res.status(500).send({
-                    success: false,
-                    message: "Error: There was a server error, please try again in a bit."
-                });
-            }
-            return res.status(200).send({
-                success: true,
-                message: 'Success: Email has been successfully changed.'
-            });
-        });
+        await Admin.updateOne({ _id }, update);
+        return res.ok('Email has been successfully changed.');
     }
 };

@@ -1,13 +1,8 @@
 const Item = require('../models/Item');
 
 module.exports = {
-    add: (req, res) => {
-        let {
-            business_id,
-            name,
-            description,
-            price
-        } = req.body;
+    add: async (req, res) => {
+        let { business_id, name, description, price } = req.body;
 
 
         let newItem = {
@@ -17,63 +12,28 @@ module.exports = {
             price
         };
 
-        Item.create(newItem, (err, item) => {
-            if (err) {
-                return res.status(500).send({
-                    success: false,
-                    message: "Error: There was an error adding the product"
-                });
-            } else {
-                return res.status(200).send({
-                    success: true,
-                    item,
-                    message: "Success: Successfully added the item."
-                });
-            }
+        let item = await Item.create(newItem);
+        return res.ok('Successfully added the item.', {
+            item: item
         });
     },
-    remove: (req, res) => {
-        let {
-            _id,
-        } = req.body;
+    remove: async (req, res) => {
+        let { _id } = req.body;
 
-        Item.remove({ _id }, (err, item) => {
-            if (err) {
-                return res.status(500).send({
-                    success: false,
-                    message: "Error: There was an error removing the Item."
-                });
-            } else {
-                return res.status(200).send({
-                    success: true,
-                    message: "Success: Successfully removed the item."
-                });
-            }
-        });
+        await Item.remove({ _id });
+        return res.ok('Successfully removed the item.');
     },
     /**
      |--------------------------------------------------
      | Mobile + Admin: View Items of a business (POST)
      |--------------------------------------------------
      */
-    business: (req, res) => {
-        let {
-            business_id,
-        } = req.body;
+    business: async (req, res) => {
+        let { business_id } = req.body;
 
-        Item.find({ business_id }, (err, item) => {
-            if (err) {
-                return res.status(500).send({
-                    success: false,
-                    message: "Error: There was an error receiving items of the business."
-                });
-            } else {
-                return res.status(200).send({
-                    success: true,
-                    item,
-                    message: "Success: Successfully received items of that business."
-                });
-            }
+        let item = await Item.find({ business_id });
+        return res.ok('Successfully received items of that business.', {
+            item: item
         });
     }
 };

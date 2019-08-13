@@ -7,23 +7,13 @@ const Types = require('../models/BusinessType');
 const CategoryType = require('../models/CategoryType');
 
 module.exports = {
-    getAll: (req, res) => {
-        Business.find({}, (err, businesses) => {
-            if (err) {
-                return res.status(500).send({
-                    success: false,
-                    message: "Server Error"
-                });
-            } else {
-                return res.status(200).send({
-                    success: true,
-                    businesses,
-                    message: "Success: Businesses received"
-                });
-            }
+    getAll: async (req, res) => {
+        let businesses = await Business.find({});
+        return res.ok('Businesses received', {
+            businesses: businesses
         });
     },
-    register: (req, res) => {
+    register: async (req, res) => {
         let {
             merchant_id,
             contact,
@@ -54,7 +44,7 @@ module.exports = {
 
 
         let newBusiness = {
-            merchant_id: merchant_id,
+            merchant_id,
             contact,
             f_name,
             l_name,
@@ -116,137 +106,49 @@ module.exports = {
         };
 
 
-        Business.create(newBusiness, (err, business) => {
-            if (err) {
-                return res.status(500).send({
-                    success: false,
-                    message: "Error: There was an error adding you. Please try again in a bit."
-                });
-            } else {
-                return res.status(200).send({
-                    success: true,
-                    business,
-                    message: "Success: Successfully created the business request."
-                });
-            }
+        let business = await Business.create(newBusiness);
+        return res.ok('Successfully created the business request.', {
+            business: business
         });
-
     },
     registrationInformation: async (req, res) => {
+        let info = {
+            currency: await Currency.find({}),
+            payment_method: await PaymentMethod.find({}),
+            bank: await Bank.find({}),
+            business_category: await Category.find({}),
+            business_type: await Types.find({})
+        };
 
-        let info = {};
-
-        Currency.find({}, (err, currency) => {
-            if (err) {
-                return res.status(500).send({
-                    success: false,
-                    message: "Server Error"
-                });
-            } else {
-                info.currency = currency;
-            }
-        });
-
-        PaymentMethod.find({}, (err, payment_method) => {
-            if (err) {
-                return res.status(500).send({
-                    success: false,
-                    message: "Server Error"
-                });
-            } else {
-                info.payment_method = payment_method;
-            }
-        });
-
-        Bank.find({}, (err, bank) => {
-            if (err) {
-                return res.status(500).send({
-                    success: false,
-                    message: "Server Error"
-                });
-            } else {
-                info.bank = bank;
-            }
-        });
-
-        Category.find({}, (err, business_category) => {
-            if (err) {
-                return res.status(500).send({
-                    success: false,
-                    message: "Server Error"
-                });
-            } else {
-                info.business_category = business_category;
-            }
-        });
-
-        Types.find({}, (err, business_type) => {
-            if (err) {
-                return res.status(500).send({
-                    success: false,
-                    message: "Server Error"
-                });
-            } else {
-                info.business_type = business_type;
-            }
-        });
-
-        return res.status(200).send({
-            success: true,
-            info,
-            message: "Success: Businesses registration information received"
+        return res.ok('Businesses registration information received', {
+            info: info
         });
     },
-    approve: (req, res) => {
-        let {
-            _id
-        } = req.body;
+    approve: async (req, res) => {
+        let { _id } = req.body;
 
-        update = {
+        let update = {
             isPending: false,
             isApproved: true
         };
 
-        Business.updateOne({ _id }, update, (err, business) => {
-            if (err) {
-                return res.status(500).send({
-                    success: false,
-                    message: "Server Error"
-                });
-            } else {
-                return res.status(200).send({
-                    success: true,
-                    message: "Success: Business Approved."
-                });
-            }
-        });
+        await Business.updateOne({ _id }, update);
+        return res.ok('Business Approved.');
     },
-    decline: (req, res) => {
-        let {
-            _id
-        } = req.body;
+    decline: async (req, res) => {
+        let { _id } = req.body;
 
-        update = {
+        let update = {
             isPending: false,
             isDeclined: true
         };
 
-        Business.updateOne({ _id }, update, (err, business) => {
-            if (err) {
-                return res.status(500).send({
-                    success: false,
-                    message: "Server Error"
-                });
-            } else {
-                return res.status(200).send({
-                    success: true,
-                    business,
-                    message: "Success: Business Declined."
-                });
-            }
+        let business = await Business.updateOne({ _id }, update);
+        return res.ok('Business Declined.', {
+            business: business
         });
     },
-    updateInfo: (req, res) => {
+    updateInfo: async (req, res) => {
         let {
             _id,
             store_name,
@@ -274,42 +176,15 @@ module.exports = {
             saturday
         };
 
-        Business.updateOne({ _id }, update, (err, business) => {
-            if (err) {
-                return res.status(500).send({
-                    success: false,
-                    message: "Error: The business id sent cannot be updated. Please check if it is valid."
-                });
-            } else {
-                return res.status(200).send({
-                    success: true,
-                    message: "Success: Business Information Updated."
-                });
-            }
-        });
+        await Business.updateOne({ _id }, update);
+        return res.ok('Business Information Updated.');
     },
-    getTypes: (req, res) => {
-        CategoryType.find({}, (err, categories) => {
-            if (err) {
-                return res.status(500).send({
-                    success: false,
-                    message: "Server Error"
-                });
-            }
-            Business.find({}, (err, businesses) => {
-                if (err) {
-                    return res.status(500).send({
-                        success: false,
-                        message: "Server Error"
-                    });
-                }
-                return res.status(200).send({
-                    success: true,
-                    categories,
-                    businesses,
-                    message: "Success: Categories received"
-                });
-            });
+    getTypes: async (req, res) => {
+        let categories = await CategoryType.find({});
+        let businesses = await Business.find({});
+        return res.ok('Categories received', {
+            categories: categories,
+            businesses: businesses
         });
     }
 };
