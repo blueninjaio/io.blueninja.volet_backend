@@ -4,7 +4,6 @@ const Bank = require('../models/Bank');
 const PaymentMethod = require('../models/PaymentMethod');
 const Category = require('../models/BusinessCategory');
 const Types = require('../models/BusinessType');
-const CategoryType = require('../models/CategoryType');
 
 module.exports = {
     getAll: async (req, res) => {
@@ -180,10 +179,11 @@ module.exports = {
         return res.ok('Business Information Updated.');
     },
     getTypes: async (req, res) => {
-        let categories = await CategoryType.find({});
+        let types = await Types.find({});
+
         let businesses = await Business.find({});
         return res.ok('Categories received', {
-            categories: categories,
+            categories: types,
             businesses: businesses
         });
     }
