@@ -2,6 +2,9 @@ const HttpStatus = require('http-status-codes');
 const jwt = require('jsonwebtoken');
 
 const { private_key } = require('../config/Config');
+const Admin = require('../models/Admin');
+const Merchant = require('../models/Merchant');
+const User = require('../models/User');
 
 module.exports = function (...types) {
     return async (req, res, next) => {
@@ -44,7 +47,22 @@ module.exports = function (...types) {
                 if (!types.includes(decoded.type)) {
                     return res.forbidden('Failed to authenticate token.');
                 }
-                req.decoded = decoded;
+                let email = decoded.email;
+                req.email = email;
+                switch (decoded.type) {
+                    case 'admin': {
+                        req.admin = await Admin.findOne({email});
+                        break
+                    }
+                    case 'merchant': {
+                        req.merchant = await Merchant.findOne({email});
+                        break
+                    }
+                    case 'user': {
+                        req.user = await User.findOne({email});
+                        break
+                    }
+                }
             }
             await next();
         } catch (e) {
