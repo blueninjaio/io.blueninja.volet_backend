@@ -12,7 +12,7 @@ const template = {
         x_signature_key: '',
         collection_id: ''
     },
-    endpoint: ''
+    local_endpoint: ''
 };
 
 const environments = {};
@@ -30,7 +30,7 @@ environments.production = {
         x_signature_key: 'S-2QI6TDE0YSqhGawWWy-HiA',
         collection_id: 'oxylfiq_'
     },
-    endpoint: 'http://127.0.0.1:8080/api'
+    local_endpoint: 'http://127.0.0.1:8080/api'
 };
 
 environments.dev = {
@@ -47,7 +47,7 @@ environments.dev = {
         x_signature_key: 'S-s7b4yWpp9h7rrkNM1i3Z_g',
         collection_id: 'cn5tiucb'
     },
-    endpoint: 'http://127.0.0.1/api'
+    local_endpoint: 'http://127.0.0.1/api'
 };
 
 

@@ -1,30 +1,26 @@
 const HmacSHA256 = require('crypto-js/hmac-sha256');
 const User = require('../models/User');
-const { billplz } = require('../config/Config');
+const { billplz, local_endpoint } = require('../config/Config');
+const fetch = require('node-fetch');
 
 module.exports = {
     create: async (req, res) => {
-        let { name, amount, description, redirect_url } = req.body;
-        if (!mobile && !email) {
-            return res.bad_request("Mobile number or email need to be provided.")
-        }
-        User.find({}, )
-        let result = await fetch(
-            `${billplz.endpoint}/bills`,
-            {
+        let { amount, description, redirect_url } = req.body;
+        let user = req.user;
+        let result = await fetch(`${billplz.endpoint}/bills`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                     'Accept': "application/json",
-                    'Authorization': 'Basic ' + Buffer.from(`${billplz.endpoint}:`).toString('base64')
+                    'Authorization': 'Basic ' + Buffer.from(`${billplz.secret}:`).toString('base64')
                 },
                 body: JSON.stringify({
                     collection_id: billplz.collection_id,//	The collection ID. A string.
-                    email: email,//	The email address of the bill’s recipient. (Email is required if mobile is not present.)
-                    mobile: mobile,//	Recipient’s mobile number. Be sure that all mobile numbers include country code, area code and number without spaces or dashes. (e.g., +60122345678 or 60122345678). Use Google libphonenumber library to help. Mobile is required if email is not present.
-                    name: name,//	Bill’s recipient name. Useful for identification on recipient part. (Max of 255 characters)
+                    email: user.email,//	The email address of the bill’s recipient. (Email is required if mobile is not present.)
+                    mobile: user.contact,//	Recipient’s mobile number. Be sure that all mobile numbers include country code, area code and number without spaces or dashes. (e.g., +60122345678 or 60122345678). Use Google libphonenumber library to help. Mobile is required if email is not present.
+                    name: user.f_name + " " + user.l_name,//	Bill’s recipient name. Useful for identification on recipient part. (Max of 255 characters)
                     amount: amount,//	A positive integer in the smallest currency unit (e.g 100 cents to charge RM 1.00)
-                    callback_url: `${billplz.endpoint}/payment/billplz`,//	Web hook URL to be called after payment’s transaction completed. It will POST a Bill object.
+                    callback_url: `${local_endpoint}/payment/billplz`,//	Web hook URL to be called after payment’s transaction completed. It will POST a Bill object.
                     description: description,//	The bill's description. Will be displayed on bill template. String format. (Max of 200 characters)
                     //OPTIONAL ARGUMENTS
                     //due_at: ,//	Due date for the bill. The format YYYY-MM-DD, default value is today. Year range is 19xx to 2xxx
@@ -38,8 +34,10 @@ module.exports = {
             }
         );
         result = await result.json();
-        //
-        return res.ok();
+        if (result.error) {
+            return res.bad_request(result.error.message);
+        }
+        return res.ok("Bill created.", result);
     },
     billplz_payment: async (req, res) => {
         let { id, collection_id, paid, state, amount, paid_amount, due_at, email, mobile, name, URL, paid_at, x_signature } = req.body;
