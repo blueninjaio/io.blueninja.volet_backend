@@ -20,10 +20,10 @@ module.exports = {
             f_name,
             l_name,
             email,
+            password: bcrypt.hashSync(password, 8),
             credits: 0,
             dateCreated: new Date()
         };
-        newUser.password = bcrypt.hashSync(password, 8);
 
         let user = await User.create(newUser);
         return res.ok('Successfully created your account.', {
