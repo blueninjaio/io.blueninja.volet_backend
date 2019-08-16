@@ -37,7 +37,7 @@ module.exports = {
         if (!user || !bcrypt.compareSync(password, user.password)) {
             return req.unauthorized("Invalid login credentials.");
         }
-        let token = jwt.sign({ email }, config.secret, {
+        let token = jwt.sign({ email, type: 'user' }, config.private_key, {
             expiresIn: 43200
         });
         return res.ok('Successful login.', {

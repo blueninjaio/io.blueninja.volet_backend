@@ -2,6 +2,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const Admin = require('../models/Admin');
 const config = require('../config/config');
+const { private_key } = require('../config/Config');
 
 module.exports = {
     getAll: async (req, res) => {
@@ -31,7 +32,7 @@ module.exports = {
         if (!user || !bcrypt.compareSync(password, user.password)) {
             return res.bad_request('Invalid login credentials.');
         }
-        let token = jwt.sign({ email }, config.secret, {
+        let token = jwt.sign({ email, type: 'admin' }, private_key, {
             expiresIn: 43200
         });
         return res.ok('Successful login', {

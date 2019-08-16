@@ -40,7 +40,7 @@ module.exports = {
             return res.unauthorized();
         }
 
-        let token = jwt.sign({ email }, config.secret, {
+        let token = jwt.sign({ email, type: 'merchant' }, config.private_key, {
             expiresIn: 43200
         });
 
