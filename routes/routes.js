@@ -76,8 +76,8 @@ router.post('/static/faq', RouteHandler('admin'), staticController.editFaq);
 router.post('/static/policies', RouteHandler('admin'), staticController.editPolicies);
 
 let transactionController = require('../controllers/Transaction');
-router.get('/transaction', RouteHandler('admin'), transactionController.getAllTransactions);
-router.post('/transaction', RouteHandler('admin'), transactionController.createTransaction);
+router.get('/transaction/:user_type', RouteHandler('admin'), transactionController.getAllTransactions);
+router.post('/transaction/:user_type', RouteHandler('admin'), transactionController.createTransaction);
 
 let userController = require('../controllers/User');
 router.get('/users', RouteHandler('admin'), userController.getAll);
