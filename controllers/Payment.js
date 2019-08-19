@@ -1,6 +1,6 @@
 const HmacSHA256 = require('crypto-js/hmac-sha256');
 const User = require('../models/User');
-const { billplz, local_endpoint } = require('../config/Config');
+const { billplz, local_endpoint } = require('../config/config');
 const fetch = require('node-fetch');
 
 module.exports = {

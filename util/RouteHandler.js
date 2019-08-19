@@ -1,7 +1,7 @@
 const HttpStatus = require('http-status-codes');
 const jwt = require('jsonwebtoken');
 
-const { private_key } = require('../config/Config');
+const { private_key } = require('../config/config');
 const Admin = require('../models/Admin');
 const Merchant = require('../models/Merchant');
 const User = require('../models/User');
