@@ -1,8 +1,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const Admin = require('../models/Admin');
-const config = require('../config/config');
-const { private_key } = require('../config/Config');
+const { private_key } = require('../config/config');
 
 module.exports = {
     getAll: async (req, res) => {
