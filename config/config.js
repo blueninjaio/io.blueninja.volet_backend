@@ -19,7 +19,7 @@ const environments = {};
 environments.production = {
     port: 80,
     mongoose: {
-        uri: 'mongodb://localhost:27017/volet',
+        uri: 'mongodb://mongo:27017/volet',
         options: { useNewUrlParser: true }
     },
     private_key: 'blueninja',
