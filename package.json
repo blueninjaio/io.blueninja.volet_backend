@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "PORT=80 node index.js",
+    "start": "set NODE_ENV=production&& nodemon node index.js",
     "dev": "set NODE_ENV=dev&& nodemon index.js"
   },
   "author": "vin",
