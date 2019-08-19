@@ -18,10 +18,8 @@ module.exports = {
      |--------------------------------------------------
      */
     create: async (req, res) => {
-        let { user_id } = req.body;
-
         let newAgent = {
-            user_id
+            user_id: req.user._id
         };
 
         await Agent.create(newAgent);

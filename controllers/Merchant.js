@@ -18,7 +18,6 @@ module.exports = {
             f_name,
             l_name,
             email,
-            dateCreated: new Date(),
             password: bcrypt.hashSync(password, 8)
         };
 

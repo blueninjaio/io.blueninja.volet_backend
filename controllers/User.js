@@ -21,8 +21,7 @@ module.exports = {
             l_name,
             email,
             password: bcrypt.hashSync(password, 8),
-            credits: 0,
-            dateCreated: new Date()
+            credits: 0
         };
 
         let user = await User.create(newUser);
@@ -63,22 +62,17 @@ module.exports = {
         return res.ok(`Password reset to ` + newPassword);
     },
     resetPassword: async (req, res) => {
-        let { email, temp_password, new_password } = req.body;
-
-        let user = await User.findOne({ email });
-        if (!user) {
-            return req.unauthorized("User not found.");
-        }
+        let { temp_password, new_password } = req.body;
+        let user = req.user;
         let passwordIsValid = bcrypt.compareSync(temp_password, user.password);
         if (!passwordIsValid) {
             return res.unauthorized('User password does not match.');
         }
-        let hashedPassword = bcrypt.hashSync(new_password, 8);
         let reset = {
             tempPassword: false,
-            password: hashedPassword
+            password: bcrypt.hashSync(new_password, 8)
         };
-        await User.update({ email }, reset);
+        await User.update({ _id: user._id }, reset);
         return res.ok('Password has been successfully reset.');
     },
     updatePushToken: async (req, res) => {
@@ -121,14 +115,8 @@ module.exports = {
         });
     },
     verify: async (req, res) => {
-        let { email } = req.body;
-
-        let user = await User.findOne({ email });
-        if (!user) {
-            return req.unauthorized("User not found.");
-        }
         return res.ok('User successfully verified', {
-            user: user
+            user: req.user
         });
     }
 };

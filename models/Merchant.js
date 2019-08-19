@@ -6,7 +6,10 @@ const schema = new mongoose.Schema({
     email: String,
     password: String,
     push_token: String,
-    dateCreated: String
+    date_created: {
+        type: Date,
+        default: Date.now
+    }
 });
 
 const model = mongoose.model('Merchant', schema);

@@ -41,17 +41,11 @@ module.exports = {
         });
     },
     verifyUser: async (req, res) => {
-        let { email } = req.body;
-
-        let user = await Admin.findOne({ email });
-        if (!user) {
-            return res.bad_request('No user found with that email.');
-        }
         return res.ok('User verified', {
-            user: user
+            user: req.admin
         });
     },
-    forgotPassword: async (req, res) => {
+    /*forgotPassword: async (req, res) => {
         let { email } = req.body;
 
         let user = await Admin.findOne({ email });
@@ -65,18 +59,18 @@ module.exports = {
         };
         await Admin.updateOne({ email }, update);
         return res.ok(`Password reset to ` + password);
-    },
+    },*/
     changePassword: async (req, res) => {
-        let { email, old_password, new_password } = req.body;
+        let {  old_password, new_password } = req.body;
 
-        let user = await Admin.findOne({ email });
-        if (!user || !bcrypt.compareSync(old_password, user.password)) {
+        let user = req.admin;
+        if (!bcrypt.compareSync(old_password, user.password)) {
             return res.bad_request('Invalid credentials.');
         }
         let reset = {
             password: bcrypt.hashSync(new_password, 8)
         };
-        await Admin.update({ email }, reset);
+        await Admin.update({ email: user.email }, reset);
         return res.ok('Password has been successfully reset.');
     },
     changeEmail: async (req, res) => {

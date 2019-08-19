@@ -13,8 +13,7 @@ module.exports = {
         let newFeedback = {
             user_id,
             rating,
-            description,
-            dateCreated: new Date()
+            description
         };
 
         await Feedback.create(newFeedback);

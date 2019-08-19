@@ -4,16 +4,15 @@ let router = express.Router();
 
 let adminController = require('../controllers/Admin');
 router.get('/admin', RouteHandler('admin'), adminController.getAll);
-router.post('/admin', RouteHandler(), adminController.create);
+router.post('/admin', RouteHandler('admin'), adminController.create);
 router.post('/admin/login', RouteHandler(), adminController.login);
-router.post('/admin/me', RouteHandler(), adminController.verifyUser);
-router.post('/admin/forgotPassword', RouteHandler(), adminController.forgotPassword);
-router.post('/admin/changePassword', RouteHandler(), adminController.changePassword);
-router.post('/admin/changeEmail', RouteHandler(), adminController.changeEmail);
+router.get('/admin/me', RouteHandler('admin'), adminController.verifyUser);
+router.post('/admin/changePassword', RouteHandler('admin'), adminController.changePassword);
+router.post('/admin/changeEmail', RouteHandler('admin'), adminController.changeEmail);
 
 let agentController = require('../controllers/Agent');
 router.get('/agents', RouteHandler('admin'), agentController.getAll);
-router.post('/agents', RouteHandler(), agentController.create);
+router.post('/agents/apply', RouteHandler('user'), agentController.create);
 router.post('/agents/approve', RouteHandler('admin'), agentController.approve);
 router.post('/agents/decline', RouteHandler('admin'), agentController.decline);
 
@@ -77,12 +76,8 @@ router.post('/static/faq', RouteHandler('admin'), staticController.editFaq);
 router.post('/static/policies', RouteHandler('admin'), staticController.editPolicies);
 
 let transactionController = require('../controllers/Transaction');
-router.get('/transaction/user', RouteHandler('admin'), transactionController.getAllUserTransactions);
-router.get('/transaction/userAgent', RouteHandler('admin'), transactionController.getAllUserAgentTransactions);
-router.get('/transaction/merchant', RouteHandler('admin'), transactionController.getAllMerchantTransactions);
-router.post('/transaction/user', RouteHandler('admin'), transactionController.createUserTransaction);
-router.post('/transaction/userAgent', RouteHandler('admin'), transactionController.createUserAgentTransaction);
-router.post('/transaction/merchant', RouteHandler('admin'), transactionController.createMerchantTransaction);
+router.get('/transaction', RouteHandler('admin'), transactionController.getAllTransactions);
+router.post('/transaction', RouteHandler('admin'), transactionController.createTransaction);
 
 let userController = require('../controllers/User');
 router.get('/users', RouteHandler('admin'), userController.getAll);
@@ -90,10 +85,10 @@ router.post('/users/id', RouteHandler('admin'), userController.getById);
 router.post('/users', RouteHandler(), userController.register);
 router.post('/users/login', RouteHandler(), userController.login);
 router.post('/users/tempPassword', RouteHandler(), userController.createTempPassword);
-router.post('/users/resetPassword', RouteHandler(), userController.resetPassword);
+router.post('/users/resetPassword', RouteHandler('user'), userController.resetPassword);
 router.post('/users/updatePush', RouteHandler('admin'), userController.updatePushToken);
 router.post('/users/removePush', RouteHandler('admin'), userController.removePushToken);
-router.post('/users/me', RouteHandler('user'), userController.verify);
+router.get('/users/me', RouteHandler('user'), userController.verify);
 
 let voletController = require('../controllers/Volet');
 router.get('/volet', RouteHandler('admin'), voletController.getAll);
@@ -113,7 +108,7 @@ router.post('/currency/toggle', RouteHandler('admin'), toggleController.currency
 router.post('/payment_method/toggle', RouteHandler('admin'), toggleController.paymentMethod);
 
 let paymentController = require('../controllers/Payment');
-router.post('/payment/create', RouteHandler('user'), paymentController.create);
+router.post('/payment', RouteHandler('user'), paymentController.create);
 router.post('/payment/billplz', RouteHandler(), paymentController.billplz_payment);
 
 
