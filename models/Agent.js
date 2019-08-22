@@ -7,6 +7,8 @@ const schema = new mongoose.Schema({
     },
     isApproved: Boolean,
     isDeclined: Boolean,
+    isActive: Boolean,
+    gps_coordinates: String,
 });
 
 const model = mongoose.model('Agent', schema);

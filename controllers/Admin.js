@@ -1,7 +1,6 @@
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
+const auth = require('../middlewares/auth');
 const Admin = require('../models/Admin');
-const { private_key } = require('../config/config');
 
 module.exports = {
     getAll: async (req, res) => {
@@ -17,8 +16,8 @@ module.exports = {
             email: email,
             password: bcrypt.hashSync(password, 8)
         };
-        let user = await Admin.findOne({ email });
-        if (user) {
+        let admin = await Admin.findOne({ email });
+        if (admin) {
             return res.bad_request('Email has already been registered.');
         }
         await Admin.create(newUser);
@@ -27,16 +26,14 @@ module.exports = {
     login: async (req, res) => {
         let { email, password } = req.body;
 
-        let user = await Admin.findOne({ email });
-        if (!user || !bcrypt.compareSync(password, user.password)) {
+        let admin = await Admin.findOne({ email });
+        if (!admin || !bcrypt.compareSync(password, admin.password)) {
             return res.bad_request('Invalid login credentials.');
         }
-        let token = jwt.sign({ email, type: 'admin' }, private_key, {
-            expiresIn: 43200
-        });
+        let token = auth.register(admin);
         return res.ok('Successful login', {
             token: token,
-            user: user,
+            user: admin,
         });
     },
     verifyUser: async (req, res) => {

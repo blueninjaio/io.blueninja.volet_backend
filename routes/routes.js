@@ -1,115 +1,136 @@
 let express = require('express');
-let RouteHandler = require('../util/RouteHandler');
-let router = express.Router();
+let route = require('../middlewares/route');
+let express_router = express.Router();
+let router = {
+    get: (path, auth, ...callback) => {
+        if (typeof auth == 'string' || Array.isArray(auth)) {
+            express_router.get(path, route.handler, route.auth(auth), ...callback);
+        } else {
+            express_router.get(path, route.handler, auth, ...callback);
+        }
+    },
+    post: (path, auth, ...callback) => {
+        if (typeof auth == 'string' || Array.isArray(auth)) {
+            express_router.post(path, route.handler, route.auth(auth), ...callback);
+        } else {
+            express_router.post(path, route.handler, auth, ...callback);
+        }
+    }
+};
 
-let adminController = require('../controllers/Admin');
-router.get('/admin', RouteHandler('admin'), adminController.getAll);
-router.post('/admin', RouteHandler('admin'), adminController.create);
-router.post('/admin/login', RouteHandler(), adminController.login);
-router.get('/admin/me', RouteHandler('admin'), adminController.verifyUser);
-router.post('/admin/changePassword', RouteHandler('admin'), adminController.changePassword);
-router.post('/admin/changeEmail', RouteHandler('admin'), adminController.changeEmail);
+let controller;
+controller = require('../controllers/Admin');
+router.get ('/admin',                ['admin'], controller.getAll);
+router.post('/admin',                ['admin'], controller.create);
+router.post('/admin/login',                           controller.login);
+router.get ('/admin/me',             ['admin'], controller.verifyUser);
+router.post('/admin/changePassword', ['admin'], controller.changePassword);
+router.post('/admin/changeEmail',    ['admin'], controller.changeEmail);
 
-let agentController = require('../controllers/Agent');
-router.get('/agents', RouteHandler('admin'), agentController.getAll);
-router.post('/agents/apply', RouteHandler('user'), agentController.create);
-router.post('/agents/approve', RouteHandler('admin'), agentController.approve);
-router.post('/agents/decline', RouteHandler('admin'), agentController.decline);
+controller = require('../controllers/Agent');
+router.get ('/agents',         ['admin'], controller.getAll);
+router.post('/agents/apply',   ['user'],  controller.create);
+router.post('/agents/approve', ['admin'], controller.approve);
+router.post('/agents/decline', ['admin'], controller.decline);
 
-let bankController = require('../controllers/Bank');
-router.get('/bank', RouteHandler('admin'), bankController.getAll);
-router.post('/bank', RouteHandler('admin'), bankController.create);
+controller = require('../controllers/Bank');
+router.get ('/bank', ['admin'], controller.getAll);
+router.post('/bank', ['admin'], controller.create);
 
-let businessController = require('../controllers/Business');
-router.get('/business', RouteHandler('admin'), businessController.getAll);
-router.post('/business', RouteHandler(), businessController.register);
-router.get('/business/registrationInformation', RouteHandler('admin'), businessController.registrationInformation);
-router.post('/business/approve', RouteHandler('admin'), businessController.approve);
-router.post('/business/decline', RouteHandler('admin'), businessController.decline);
-router.post('/business/info', RouteHandler('admin'), businessController.updateInfo);
-router.get('/business/getTypes', RouteHandler('admin'), businessController.getTypes);
+controller = require('../controllers/Business');
+router.get ('/business',                         ['admin'], controller.getAll);
+router.post('/business',                                          controller.register);
+router.get ('/business/registrationInformation', ['admin'], controller.registrationInformation);
+router.post('/business/approve',                 ['admin'], controller.approve);
+router.post('/business/decline',                 ['admin'], controller.decline);
+router.post('/business/info',                    ['admin'], controller.updateInfo);
+router.get ('/business/getTypes',                ['admin'], controller.getTypes);
 
-let businessCategoryController = require('../controllers/BusinessCategory');
-router.get('/business_category', RouteHandler('admin'), businessCategoryController.getAll);
-router.post('/business_category', RouteHandler('admin'), businessCategoryController.create);
-router.post('/business_category/business', RouteHandler('admin'), businessCategoryController.get);
+controller = require('../controllers/BusinessCategory');
+router.get ('/business_category',          ['admin'], controller.getAll);
+router.post('/business_category',          ['admin'], controller.create);
+router.post('/business_category/business', ['admin'], controller.get);
 
-let businessTypeController = require('../controllers/BusinessType');
-router.get('/business_type', RouteHandler('admin'), businessTypeController.getAll);
-router.post('/business_type', RouteHandler('admin'), businessTypeController.create);
+controller = require('../controllers/BusinessType');
+router.get ('/business_type', ['admin'], controller.getAll);
+router.post('/business_type', ['admin'], controller.create);
 
-let currencyController = require('../controllers/Currency');
-router.get('/currency', RouteHandler('admin'), currencyController.getAll);
-router.post('/currency', RouteHandler('admin'), currencyController.create);
-router.post('/currency/convert', RouteHandler(), currencyController.convert);
+controller = require('../controllers/Currency');
+router.get ('/currency', ['admin'], controller.getAll);
+router.post('/currency', ['admin'], controller.create);
+router.post('/currency/convert',          controller.convert);
 
-let feedbackController = require('../controllers/Feedback');
-router.get('/feedbacks', RouteHandler('admin'), feedbackController.getAll);
-router.post('/feedbacks', RouteHandler('admin'), feedbackController.create);
+controller = require('../controllers/Feedback');
+router.get ('/feedbacks', ['admin'], controller.getAll);
+router.post('/feedbacks', ['admin'], controller.create);
 
-let itemController = require('../controllers/Item');
-router.post('/item/add', RouteHandler('admin'), itemController.add);
-router.post('/item/remove', RouteHandler('admin'), itemController.remove);
-router.post('/item/business', RouteHandler('admin'), itemController.business);
+controller = require('../controllers/Item');
+router.post('/item/add',      ['admin'], controller.add);
+router.post('/item/remove',   ['admin'], controller.remove);
+router.post('/item/business', ['admin'], controller.business);
 
-let merchantController = require('../controllers/Merchant');
-router.get('/merchants', RouteHandler('admin'), merchantController.getAll);
-router.post('/merchants/id', RouteHandler('admin'), merchantController.getById);
-router.post('/merchants', RouteHandler(), merchantController.register);
-router.post('/merchants/login', RouteHandler(), merchantController.login);
-router.post('/merchants/tempPassword', RouteHandler('admin'), merchantController.createTempPassword);
-router.post('/merchants/resetPassword', RouteHandler('admin'), merchantController.resetPassword);
-router.post('/merchants/updatePush', RouteHandler('admin'), merchantController.updatePushToken);
-router.post('/merchants/removePush', RouteHandler('admin'), merchantController.removePushToken);
+controller = require('../controllers/Merchant');
+router.get ('/merchants',               ['admin'], controller.getAll);
+router.post('/merchants/id',            ['admin'], controller.getById);
+router.post('/merchants',                                controller.register);
+router.post('/merchants/login',                          controller.login);
+router.post('/merchants/tempPassword',  ['admin'], controller.createTempPassword);
+router.post('/merchants/resetPassword', ['admin'], controller.resetPassword);
+router.post('/merchants/updatePush',    ['admin'], controller.updatePushToken);
+router.post('/merchants/removePush',    ['admin'], controller.removePushToken);
 
-let paymentMethodController = require('../controllers/PaymentMethod');
-router.post('/payment_method/', RouteHandler('admin'), paymentMethodController.create);
-router.get('/payment_method/', RouteHandler('admin'), paymentMethodController.getAll);
+controller = require('../controllers/PaymentMethod');
+router.post('/payment_method/', ['admin'], controller.create);
+router.get ('/payment_method/', ['admin'], controller.getAll);
 
-let pushController = require('../controllers/Push');
-router.get('/push', RouteHandler('admin'), pushController.getAll);
-router.post('/push', RouteHandler('admin'), pushController.create);
+controller = require('../controllers/Push');
+router.get ('/push', ['admin'], controller.getAll);
+router.post('/push', ['admin'], controller.create);
 
-let staticController = require('../controllers/Static');
-router.get('/static', RouteHandler('admin'), staticController.getAll);
-router.post('/static/faq', RouteHandler('admin'), staticController.editFaq);
-router.post('/static/policies', RouteHandler('admin'), staticController.editPolicies);
+controller = require('../controllers/Static');
+router.get ('/static',          ['admin'], controller.getAll);
+router.post('/static/faq',      ['admin'], controller.editFaq);
+router.post('/static/policies', ['admin'], controller.editPolicies);
 
-let transactionController = require('../controllers/Transaction');
-router.get('/transaction/:user_type', RouteHandler('admin'), transactionController.getAllTransactions);
-router.post('/transaction/:user_type', RouteHandler('admin'), transactionController.createTransaction);
+controller = require('../controllers/Transaction');
+router.get ('/transaction/:user_type', ['admin'], controller.getAllTransactions);
+router.post('/transaction/:user_type', ['admin'], controller.createTransaction);
 
-let userController = require('../controllers/User');
-router.get('/users', RouteHandler('admin'), userController.getAll);
-router.post('/users/id', RouteHandler('admin'), userController.getById);
-router.post('/users', RouteHandler(), userController.register);
-router.post('/users/login', RouteHandler(), userController.login);
-router.post('/users/tempPassword', RouteHandler(), userController.createTempPassword);
-router.post('/users/resetPassword', RouteHandler('user'), userController.resetPassword);
-router.post('/users/updatePush', RouteHandler('admin'), userController.updatePushToken);
-router.post('/users/removePush', RouteHandler('admin'), userController.removePushToken);
-router.get('/users/me', RouteHandler('user'), userController.verify);
+controller = require('../controllers/User');
+router.get ('/users',                ['admin'],                       controller.getAll);
+router.post('/users/id',             ['admin'],                       controller.getById);
+router.post('/users',                                route.tac(0), controller.register);
+router.post('/users/login',                                                 controller.login);
+router.post('/users/forget-password',                route.tac(1), controller.forgetPassword);
+router.post('/users/reset-password', ['user'], route.tac(2), controller.resetPassword);
+router.post('/users/updatePush',     ['admin'],                       controller.updatePushToken);
+router.post('/users/removePush',     ['admin'],                       controller.removePushToken);
+router.get ('/users/me',             ['user'],                        controller.verify);
 
-let voletController = require('../controllers/Volet');
-router.get('/volet', RouteHandler('admin'), voletController.getAll);
-router.post('/volet', RouteHandler('admin'), voletController.create);
-router.post('/volet/id', RouteHandler('admin'), voletController.calculate);
+controller = require('../controllers/TAC');
+router.post('/tac',            controller.send);
+router.post('/check-tac',      controller.check);
 
-let voucherController = require('../controllers/Voucher');
-router.get('/vouchers', RouteHandler('admin'), voucherController.getAll);
-router.post('/vouchers', RouteHandler('admin'), voucherController.create);
-router.post('/vouchers/redeem', RouteHandler('admin'), voucherController.redeem);
+controller = require('../controllers/Volet');
+router.get ('/volet',    ['admin'], controller.getAll);
+router.post('/volet',    ['admin'], controller.create);
+router.post('/volet/id', ['admin'], controller.calculate);
 
-let toggleController = require('../controllers/Toggle');
-router.post('/bank/toggle', RouteHandler('admin'), toggleController.bank);
-router.post('/business_category/toggle', RouteHandler('admin'), toggleController.businessCategory);
-router.post('/business_type/toggle', RouteHandler('admin'), toggleController.businessType);
-router.post('/currency/toggle', RouteHandler('admin'), toggleController.currency);
-router.post('/payment_method/toggle', RouteHandler('admin'), toggleController.paymentMethod);
+controller = require('../controllers/Voucher');
+router.get ('/vouchers',        ['admin'], controller.getAll);
+router.post('/vouchers',        ['admin'], controller.create);
+router.post('/vouchers/redeem', ['admin'], controller.redeem);
 
-let paymentController = require('../controllers/Payment');
-router.post('/payment', RouteHandler('user'), paymentController.create);
-router.post('/payment/billplz', RouteHandler(), paymentController.billplz_payment);
+controller = require('../controllers/Toggle');
+router.post('/bank/toggle',              ['admin'], controller.bank);
+router.post('/business_category/toggle', ['admin'], controller.businessCategory);
+router.post('/business_type/toggle',     ['admin'], controller.businessType);
+router.post('/currency/toggle',          ['admin'], controller.currency);
+router.post('/payment_method/toggle',    ['admin'], controller.paymentMethod);
+
+controller = require('../controllers/Payment');
+router.post('/payment', ['user'], controller.create);
+router.post('/payment/billplz',         controller.billplz_payment);
 
 
-module.exports = router;
+module.exports = express_router;

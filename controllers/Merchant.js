@@ -1,7 +1,6 @@
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
 const Merchant = require('../models/Merchant');
-const config = require('../config/config');
+const auth = require('../middlewares/auth');
 
 module.exports = {
     getAll: async (req, res) => {
@@ -39,10 +38,7 @@ module.exports = {
             return res.unauthorized();
         }
 
-        let token = jwt.sign({ email, type: 'merchant' }, config.private_key, {
-            expiresIn: 43200
-        });
-
+        let token = auth.register(merchant);
         return res.ok('Successful login.', {
             token: token,
             merchant: merchant
