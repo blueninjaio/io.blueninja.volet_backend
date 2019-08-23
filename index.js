@@ -6,6 +6,7 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const config = require("./config/config");
 const routes = require('./routes/routes');
+const response_methods = require('./middlewares/response_methods');
 
 const port = process.env.port || config.port;
 
@@ -18,7 +19,12 @@ app.use(bodyParser.json({ limit: '50mb' }));
 app.use(express.static(path.join(__dirname, 'client/build')));
 app.use(cors());
 
+app.use(response_methods);
 app.use(`/api`, routes);
+app.use(function (err, req, res, next) {
+    console.error(err.stack);
+    return res.internal_server_error(err.message);
+});
 app.listen(port, () => {
     console.log(`Server running on port: ${port}`);
 });

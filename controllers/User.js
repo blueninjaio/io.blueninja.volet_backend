@@ -114,6 +114,7 @@ module.exports = {
         });
     },
     verify: async (req, res) => {
+        throw new Error("Error 2")
         return res.ok('User successfully verified', {
             user: req.user
         });
