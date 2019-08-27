@@ -1,0 +1,22 @@
+module.exports = {
+    AdminController: require('./Admin'),
+    AgentController: require('./Agent'),
+    BankController: require('./Bank'),
+    BusinessController: require('./Business'),
+    BusinessCategoryController: require('./BusinessCategory'),
+    BusinessTypeController: require('./BusinessType'),
+    CurrencyController: require('./Currency'),
+    FeedbackController: require('./Feedback'),
+    ItemController: require('./Item'),
+    MerchantController: require('./Merchant'),
+    PaymentController: require('./Payment'),
+    PaymentMethodController: require('./PaymentMethod'),
+    PushController: require('./Push'),
+    StaticController: require('./Static'),
+    TACController: require('./TAC'),
+    ToggleController: require('./Toggle'),
+    TransactionController: require('./Transaction'),
+    UserController: require('../models/User'),
+    VoletController: require('./Volet'),
+    VoucherController: require('./Voucher')
+};

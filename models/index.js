@@ -1,5 +1,5 @@
 module.exports = {
-    admin: require('../models/Admin'),
-    merchant: require('../models/Merchant'),
-    user: require('../models/User')
+    admin: require('./Admin'),
+    merchant: require('./Merchant'),
+    user: require('./User')
 };
