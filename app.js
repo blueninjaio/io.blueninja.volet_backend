@@ -15,7 +15,7 @@ app.set('port', port);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json({ limit: '50mb' }));
-app.use('/images', express.static('images'))
+app.use('/images', express.static('images'));
 app.use(express.static(path.join(__dirname, 'client/build')));
 app.use(cors());
 
