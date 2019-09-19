@@ -9,7 +9,16 @@ const routes = require('./lib/routes');
 
 const port = process.env.port || config.port;
 
-mongoose.connect(config.mongoose.uri, config.mongoose.options);
+const connectWithRetry = () => {
+  console.log('Retrying Mongodb connection')
+  mongoose.connect(config.mongoose.uri, config.mongoose.options)
+    .then(() => console.log('Connected to MongoDB...'))
+    .catch((err) => {
+      console.log(`Could not connect to MongoDB: ${err}:${err.stack}`)
+      setTimeout(connectWithRetry, 5000)
+    })
+}
+connectWithRetry()
 
 app.set('port', port);
 app.use(express.json());
