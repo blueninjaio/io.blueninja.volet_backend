@@ -2,12 +2,10 @@ FROM node:10
 
 WORKDIR /app
 
-COPY package*.json ./
-
+COPY package*.json /app
 RUN npm install
-RUN npm install express
 
-COPY . .
+COPY . /app
 
 EXPOSE 80
 
