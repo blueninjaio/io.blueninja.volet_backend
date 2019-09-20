@@ -44,3 +44,9 @@ chai.factory('user', {
   agent_applied: false,
   is_visible: true,
 })
+
+chai.factory('bank', {
+  name: chance.name(),
+  description: chance.word({ length: 120 }),
+  isActive: chance.bool({ likelihood: 50 }),
+})
