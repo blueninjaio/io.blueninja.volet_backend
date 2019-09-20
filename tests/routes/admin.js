@@ -23,6 +23,7 @@ const adminLogin = async () => {
 
 const adminCreateSuccess = 'Admin was successfully created'
 const adminUpdatePassSuccess = 'Password has been successfully reset.'
+const adminUpdateEmailSuccess = 'Email has been successfully changed.'
 
 describe('#Admin Route', () => {
   // adding admin before being able to do any admin actions
@@ -81,11 +82,12 @@ describe('#Admin Route', () => {
   describe('#POST /admin/changePassword', () => {
     it ('should change admin password', async () => {
       const token = await adminLogin()
+      const newPassword = chance.word()
 
       const { body: response } = await chai.request(app)
         .post('/api/admin/changePassword')
         .set('Authorization', `Bearer ${token}`)
-        .send({ old_password: mainAdmin.password, new_password: chance.word() })
+        .send({ old_password: mainAdmin.password, new_password: newPassword })
 
       response.success.should.be.equal(true)
       response.message.should.be.equal(adminUpdatePassSuccess)
@@ -93,7 +95,7 @@ describe('#Admin Route', () => {
   })
 
   describe('#POST /admin/changeEmail', () => {
-    it ('should change admin email', async () => {
+    it ('should fail to change admin email due to changePassword above', async () => {
       const token = await adminLogin()
 
       const { email, _id } = await Admin.findOne({ email: mainAdmin.email })
@@ -104,9 +106,9 @@ describe('#Admin Route', () => {
         .set('Authorization', `Bearer ${token}`)
         .send({ _id, email: newEmail })
 
-      console.log(response)
-      const temp = await Admin.findOne({ email: newEmail })
-      console.log(temp, email)
+      const supposedAdmin = await Admin.findOne({ email: newEmail })
+      response.message.should.not.be.equal(adminUpdateEmailSuccess)
+      chai.expect(supposedAdmin).to.be.equal(null)
     })
   })
 })
