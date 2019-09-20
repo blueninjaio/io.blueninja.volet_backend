@@ -7,8 +7,9 @@ services:
     depends_on:
       - mongo
     volumes:
-      - ./:/app
-      - app/node_modules
+      - ./:/usr/src/app
+      - /usr/src/app/node_modules
+      - /usr/src/app/tests
     ports:
       - '80:80'
     environment:
@@ -35,4 +36,3 @@ services:
       - "27017:27017"
     volumes:
       - ./data-db:/data/db
-

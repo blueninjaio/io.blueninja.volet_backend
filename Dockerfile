@@ -1,11 +1,16 @@
-FROM node:10
+FROM node:10-alpine
 
-WORKDIR /app
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
 
-COPY package*.json /app
+# Install app dependencies
+COPY package.json /usr/src/app/
 RUN npm install
 
-COPY . /app
+# Bundle app source
+COPY . /usr/src/app
+
+COPY . .
 
 EXPOSE 80
 
