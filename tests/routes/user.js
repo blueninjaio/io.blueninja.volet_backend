@@ -37,7 +37,6 @@ const userLogin = async () => {
 }
 
 describe('#User Route', () => {
-  // adding admin before being able to do any admin actions
   before(async () => {
     for(let i = 0; i < 10; i++) {
       const user = new User({
@@ -45,7 +44,6 @@ describe('#User Route', () => {
       })
       await user.save()
     }
-    // create main admin
     await Promise.all([
       new Admin({ ...mainAdmin }).save(),
       new User({ ...mainUser }).save(),
