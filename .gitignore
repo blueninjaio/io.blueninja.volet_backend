@@ -161,3 +161,7 @@ typings/
 
 # Uploaded images folder
 images/
+
+.DS_Store
+
+data-db

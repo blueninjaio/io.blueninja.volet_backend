@@ -5,9 +5,10 @@
   "main": "app.js",
   "scripts": {
     "start": "NODE_ENV=production node app.js",
-    "prod-windows": "set NODE_ENV=production&& nodemon app.js",
-    "dev": "NODE_ENV=dev node app.js",
-    "dev-windows": "set NODE_ENV=dev&& nodemon app.js"
+    "prod-windows": "set NODE_ENV=production && nodemon app.js",
+    "dev": "NODE_ENV=dev nodemon --exec ./node_modules/.bin/babel-node app.js",
+    "dev-windows": "set NODE_ENV=dev && nodemon app.js",
+    "mocha": "./node_modules/.bin/mocha \"./tests/**/*.js\" --timeout 10000 --exit"
   },
   "author": "vin",
   "license": "ISC",
@@ -22,7 +23,7 @@
     "joi": "^14.3.1",
     "jsonwebtoken": "^8.5.1",
     "memory-cache": "^0.2.0",
-    "mongoose": "^5.6.0",
+    "mongoose": "5.6.0",
     "multer": "^1.4.2",
     "node-fetch": "latest",
     "nodemailer": "^6.2.1",
@@ -30,6 +31,17 @@
     "request-promise-native": "^1.0.7"
   },
   "devDependencies": {
-    "nodemon": "^1.19.1"
+    "@babel/cli": "^7.6.0",
+    "@babel/core": "^7.6.0",
+    "@babel/node": "^7.6.1",
+    "@babel/preset-env": "^7.6.0",
+    "chai": "^4.2.0",
+    "chai-factories": "^0.1.0",
+    "chai-http": "^4.3.0",
+    "chai-things": "^0.2.0",
+    "chance": "^1.1.0",
+    "mocha": "^6.2.0",
+    "nodemon": "^1.19.1",
+    "timekeeper": "^2.2.0"
   }
 }
