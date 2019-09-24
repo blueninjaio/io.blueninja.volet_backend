@@ -1,15 +1,15 @@
-const chai = require('chai')
-const factories = require('chai-factories')
-const Chance = require('chance')
+const chai = require('chai');
+const factories = require('chai-factories');
+const Chance = require('chance');
 
-const chance = new Chance()
-chai.use(factories)
+const chance = new Chance();
+chai.use(factories);
 
 // declaring a mock user
 chai.factory('admin', {
   email: chance.email(),
   password: chance.word({ length: 10 }),
-})
+});
 
 chai.factory('merchant', {
   contact: chance.name(),
@@ -21,7 +21,7 @@ chai.factory('merchant', {
   address: chance.address(),
   push_token: chance.word({ length: 20 }),
   credits: 0,
-})
+});
 
 chai.factory('user', {
   contact: chance.name(),
@@ -43,10 +43,10 @@ chai.factory('user', {
   is_agent: false,
   agent_applied: false,
   is_visible: true,
-})
+});
 
 chai.factory('bank', {
   name: chance.name(),
   description: chance.word({ length: 120 }),
   isActive: chance.bool({ likelihood: 50 }),
-})
+});
