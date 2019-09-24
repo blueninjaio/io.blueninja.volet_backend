@@ -8,7 +8,9 @@
     "prod-windows": "set NODE_ENV=production && nodemon app.js",
     "dev": "NODE_ENV=dev nodemon --exec ./node_modules/.bin/babel-node app.js",
     "dev-windows": "set NODE_ENV=dev && nodemon app.js",
-    "mocha": "./node_modules/.bin/mocha \"./tests/**/*.js\" --timeout 10000 --exit"
+    "mocha": "./node_modules/.bin/mocha \"./tests/**/*.js\" --timeout 10000 --exit",
+    "eslint": "./node_modules/.bin/eslint --quiet ./",
+    "eslint-fix": "./node_modules/.bin/eslint --fix ./"
   },
   "author": "vin",
   "license": "ISC",
@@ -41,6 +43,7 @@
     "chai-things": "^0.2.0",
     "chance": "^1.1.0",
     "eslint": "^6.4.0",
+    "eslint-plugin-import-order": "^2.1.4",
     "mocha": "^6.2.0",
     "nodemon": "^1.19.1",
     "timekeeper": "^2.2.0"

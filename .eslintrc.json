@@ -41,16 +41,6 @@
         "allowSingleLine": true
       }
     ],
-    "camelcase": [
-      2,
-      {
-        "properties": "never",
-        "ignoreDestructuring": true,
-        "allow": [
-          "^UNSAFE_"
-        ]
-      }
-    ],
     "prefer-const": [
       "error",
       {
@@ -61,9 +51,13 @@
     "keyword-spacing": [
       "error"
     ],
+    "import-order/import-order": 2,
     "require-atomic-updates": "off"
   },
   "parserOptions": {
     "ecmaVersion": 2018
-  }
+  },
+  "plugins": [
+    "import-order"
+  ]
 }
