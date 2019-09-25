@@ -1,6 +1,7 @@
 branch-defaults:
   master:
-    environment: $CIRCLE_BRANCH-VoletBackend-env
+    # environment: $CIRCLE_BRANCH-VoletBackend-env
+    environment: VoletBackend-env
 environment-defaults:
   VoletBackend-env:
     branch: null
