@@ -165,3 +165,8 @@ images/
 .DS_Store
 
 data-db
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml

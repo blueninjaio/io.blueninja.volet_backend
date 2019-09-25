@@ -33,3 +33,61 @@ jobs:
       - run:
           name: Tests
           command: npm run mocha
+  deploy:
+    working_directory: ~/app
+    docker:
+      - image: circleci:node:10
+        environment:
+          - DATABASE_URL=mongo:27017
+          - DATABASE_NAME=volet
+          - NODE_ENV=test
+      - image: mongo:latest
+    steps:
+      - checkout
+      - restore_cache:
+        keys:
+          - v1-dependencies-{{ checksum "package.json" }}
+          - v1-dependencies-
+
+      - run:
+          name: Install Dependencies
+          command: npm install
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+
+      - run:
+          name: Linting
+          command: npm run eslint
+
+      - run:
+          name: Tests
+          command: npm run mocha
+
+      - run:
+          name: Installing deployment dependencies
+          working_directory: /
+          command: |
+            sudo apt-get -y -qq update
+            sudo apt-get install python-pip python-dev build-essential
+            sudo pip install --upgrade setuptools
+            sudo pip install awsebcli --upgrade
+
+      - run:
+          name: Deployment
+          command: eb deploy $CIRCLE_BRANCH-VoletBackend-env
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - build
+      - deploy:
+          filters:
+            branches:
+              only:
+                - master
+                - develop
+                - staging
