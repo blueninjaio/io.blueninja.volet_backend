@@ -2,7 +2,7 @@ jobs:
   build:
     docker:
       - image: circleci/node:10
-        port: 81:81
+        port: 3001:3001
         environment:
           - DATABASE_URL=mongo:27017
           - DATABASE_NAME=volet
