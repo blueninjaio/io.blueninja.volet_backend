@@ -1,5 +1,6 @@
 /* eslint-disable */
-process.env.DATABASE_URL = 'mongodb+srv://root:123qweasd@cluster0-rbv9n.mongodb.net'
+// process.env.DATABASE_URL = 'mongodb+srv://root:123qweasd@cluster0-rbv9n.mongodb.net'
+process.env.DATABASE_URL = 'mongodb://localhost:27017'
 process.env.DATABASE_NAME = 'volet'
 process.env.NODE_ENV = 'test'
 
