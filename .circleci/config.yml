@@ -2,9 +2,11 @@ jobs:
   build:
     docker:
       - image: circleci/node:10
+        port: 81:81
         environment:
           - DATABASE_URL=mongo:27017
           - DATABASE_NAME=volet
+          - NODE_ENV=test
       - image: mongo:latest
     working_directory: ~/workspace/blueninja/io.blueninja.volet_backend
     steps:
