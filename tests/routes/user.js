@@ -105,7 +105,7 @@ describe('#User Route', () => {
   describe('#POST /api/users/add-bank', () => {
     it ('should add a bank for user', async () => {
       const token = await userLogin()
-      const { body: response } = await chai.request(app)
+      await chai.request(app)
         .post('/api/users/add-bank')
         .set('Authorization', `Bearer ${token}`)
         .send({ name: 'Ken Yap\'s Bank', number: '0108954294', bank: 'Ken Yap\'s Bank' })

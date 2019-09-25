@@ -52,9 +52,11 @@ describe('#Payment Routes', () => {
         .set('Authorization', `Bearer ${token}`)
         .send(options)
 
-      response.message.amount.should.be.equal(options.amount)
-      response.message.email.should.be.equal(mainUser.email)
-      response.message.redirect_url.should.be.equal(options.redirect_url)
+      response.success.should.be.equal(true)
+      response.bill.should.not.be.equal(null)
+      response.bill.amount.should.be.equal(options.amount)
+      response.bill.email.should.be.equal(mainUser.email)
+      response.bill.redirect_url.should.be.equal(options.redirect_url)
     })
   })
 
