@@ -1,5 +1,5 @@
 /* eslint-disable */
-process.env.DATABASE_URL = 'localhost:27017'
+process.env.DATABASE_URL = '127.0.0.1:27017'
 process.env.DATABASE_NAME = 'volet'
 process.env.NODE_ENV = 'test'
 
