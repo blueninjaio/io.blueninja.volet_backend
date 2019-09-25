@@ -5,7 +5,7 @@ jobs:
         environment:
           - DATABASE_URL=mongo:27017
           - DATABASE_NAME=volet
-      - image: mongo:3.4.4-jessie
+      - image: mongo:latest
     working_directory: ~/workspace/blueninja/io.blueninja.volet_backend
     steps:
       - checkout
