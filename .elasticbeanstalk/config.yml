@@ -1,0 +1,19 @@
+branch-defaults:
+  master:
+    environment: $CIRCLE_BRANCH-VoletBackend-env
+environment-defaults:
+  VoletBackend-env:
+    branch: null
+    repository: null
+global:
+  application_name: volet_backend
+  default_ec2_keyname: volet_backend
+  default_platform: arn:aws:elasticbeanstalk:ap-southeast-1::platform/Docker running
+    on 64bit Amazon Linux/2.12.17
+  default_region: ap-southeast-1
+  include_git_submodules: true
+  instance_profile: null
+  platform_name: null
+  platform_version: null
+  sc: git
+  workspace_type: Application
