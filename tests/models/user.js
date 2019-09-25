@@ -49,4 +49,8 @@ describe('#User Model', () => {
       oldPass.should.not.equal(newPass)
     })
   })
+
+  after(async () => {
+    await User.deleteMany({}, null)
+  })
 })

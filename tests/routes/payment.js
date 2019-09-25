@@ -5,6 +5,8 @@ const chance = require('chance').Chance();
 
 const app = require('../../app')
 const User = require('../../lib/models/user')
+const Payment = require('../../lib/models/payment')
+const Bank = require('../../lib/models/bank')
 
 chai.should()
 
@@ -95,14 +97,9 @@ describe('#Payment Routes', () => {
       response.payments.should.have.lengthOf(1)
     })
   })
-})
 
-//router.post('/volet/top-up', userAuth, catchAsyncErrors(topUpVolet));
-//router.get('/volet/payments', userAuth, catchAsyncErrors(getPayments));
-//router.post('/volet/payments/send', userAuth, catchAsyncErrors(sendPayment));
-//router.post('/volet/payments/request', userAuth, catchAsyncErrors(requestPayment));
-////todo accept request
-//router.post('/volet/withdraw/agent', userAuth, catchAsyncErrors(withdrawFromAgent));
-////router.post('/volet/withdraw/bank',          userAuth,               catchAsyncErrors(withdrawFromAgent));
-//router.post('/volet/withdraw/accept', userAuth, catchAsyncErrors(acceptWithdrawal));
-//router.post('/volet/withdraw/reject', userAuth, catchAsyncErrors(rejectWithdrawal));
+  after(async () => {
+    await User.deleteMany({})
+    await Payment.deleteMany({})
+  })
+})

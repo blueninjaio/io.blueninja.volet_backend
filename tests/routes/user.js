@@ -4,8 +4,7 @@ const chai = require('chai')
 const chance = require('chance').Chance();
 
 const app = require('../../app')
-const User = require('../../lib/models/user')
-const Admin = require('../../lib/models/admin')
+const { User, Admin, Bank } = require('../../lib/models')
 
 chai.should()
 
@@ -113,5 +112,11 @@ describe('#User Route', () => {
       const currentUser = await User.findOne({ email: mainUser.email })
       currentUser.bank_accounts.should.have.lengthOf(1)
     })
+  })
+
+  after(async () => {
+    await User.deleteMany({})
+    await Admin.deleteMany({})
+    await Bank.deleteMany({})
   })
 })

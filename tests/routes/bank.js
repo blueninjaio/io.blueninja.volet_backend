@@ -76,4 +76,8 @@ describe('#Bank Route', () => {
       status.should.be.equal(200)
     })
   })
+
+  after(async () => {
+    await Admin.deleteMany({})
+  })
 })

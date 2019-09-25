@@ -112,4 +112,8 @@ describe('#Admin Route', () => {
       supposedAdmin.email.should.not.be.equal(email)
     })
   })
+
+  after(async () => {
+    await Admin.deleteMany({})
+  })
 })

@@ -49,4 +49,8 @@ describe('#Admin Model', () => {
       oldPass.should.not.equal(newPass)
     })
   })
+
+  after(async () => {
+    await Admin.deleteMany({}, null)
+  })
 })

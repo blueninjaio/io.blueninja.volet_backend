@@ -1,5 +1,5 @@
 /* eslint-disable */
-process.env.DATABASE_URL = '127.0.0.1:27017'
+process.env.DATABASE_URL = 'mongodb+srv://root:123qweasd@cluster0-rbv9n.mongodb.net'
 process.env.DATABASE_NAME = 'volet'
 process.env.NODE_ENV = 'test'
 
@@ -12,15 +12,6 @@ chai.use(chaiThings)
 chai.use(chaiHttp)
 chai.should()
 
-// Clearing DB function for beforeEach on tests
-const clearDB = (callback) => {
-  console.log('clearing dbs...')
-  for (let i in mongoose.connection.collections) {
-    mongoose.connection.collections[i].deleteMany(() => {})
-  }
-  return
-}
-
 require('./factory')
 
 console.log('Tests starting...')
@@ -29,8 +20,7 @@ before(() => {
   require('../lib/config/db')
 })
 
-after((done) => {
-  clearDB()
+after(async (done) => {
   console.log('Tests done!')
   done()
 })

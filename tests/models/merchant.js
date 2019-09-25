@@ -49,4 +49,8 @@ describe('#Merchant Model', () => {
       oldPass.should.not.equal(newPass)
     })
   })
+
+  after(async () => {
+    await Merchant.deleteMany({}, null)
+  })
 })
