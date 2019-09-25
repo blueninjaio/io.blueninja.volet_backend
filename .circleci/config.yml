@@ -1,5 +1,5 @@
 jobs:
-  build:
+  # build:
     # docker:
     #   - image: circleci/node:10
     #     port: 3001:3001
