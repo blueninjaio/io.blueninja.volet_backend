@@ -77,7 +77,8 @@ jobs:
 
       - run:
           name: Deployment
-          command: eb deploy $CIRCLE_BRANCH-VoletBackend-env
+          command: eb deploy VoletBackend-env
+          # command: eb deploy $CIRCLE_BRANCH-VoletBackend-env
 
 workflows:
   version: 2
