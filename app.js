@@ -13,8 +13,8 @@ mongoose.connect(config.mongoose.uri, config.mongoose.options);
 
 app.set('port', port);
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(bodyParser.json({ limit: '50mb' }));
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
+app.use(bodyParser.json({ limit: '50mb', extended: true }));
 app.use('/images', express.static('images'));
 app.use(express.static(path.join(__dirname, 'client/build')));
 app.use(cors());
