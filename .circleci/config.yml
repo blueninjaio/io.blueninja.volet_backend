@@ -1,0 +1,28 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/node:10
+    working_directory: ~/workspace/blueninja/io.blueninja.volet_backend
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+
+      - run:
+          name: Install Dependencies
+          command: npm install
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+
+      - run:
+          name: Linting
+          command: npm run eslint
+
+      - run:
+          name: Tests
+          command: npm run mocha
