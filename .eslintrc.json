@@ -51,6 +51,14 @@
     "keyword-spacing": [
       "error"
     ],
+    "no-unused-vars": [
+      "error", {
+        "vars": "all",
+        "args": "none",
+        "ignoreRestSiblings": false,
+        "caughtErrors": "none"
+      }
+    ],
     "import-order/import-order": 2,
     "require-atomic-updates": "off"
   },
