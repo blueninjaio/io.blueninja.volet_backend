@@ -7,10 +7,15 @@ services:
     depends_on:
       - mongo
     volumes:
-      - app/node_modules
-      - .:/app
+      - ./:/usr/src/app
+      - /usr/src/app/node_modules
+      - /usr/src/app/tests
     ports:
       - '80:80'
+    environment:
+      - DATABASE_URL=mongo:27017
+      - DATABASE_NAME=volet
+    command: npm run dev
     # Nginx Service
   webserver:
     image: nginx:alpine
@@ -31,4 +36,3 @@ services:
       - "27017:27017"
     volumes:
       - ./data-db:/data/db
-

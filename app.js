@@ -1,15 +1,16 @@
+const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
-const path = require('path');
 const cors = require('cors');
-const mongoose = require('mongoose');
-const config = require("./lib/config");
+
+const config = require('./lib/config');
 const routes = require('./lib/routes');
 
-const port = process.env.port || config.port;
+// mongoose connection
+require('./lib/config/db');
 
-mongoose.connect(config.mongoose.uri, config.mongoose.options);
+const port = process.env.port || config.port;
 
 app.set('port', port);
 app.use(express.json());
@@ -21,5 +22,7 @@ app.use(cors());
 
 app.use(routes);
 app.listen(port, () => {
-    console.log(`Server running on port: ${port}`);
+  console.log(`Server running on port: ${port}`);
 });
+
+module.exports = app;
