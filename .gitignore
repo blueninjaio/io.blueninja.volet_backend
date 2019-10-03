@@ -161,3 +161,6 @@ typings/
 
 # Uploaded images folder
 images/
+
+# MonogDB local files
+data-db/
