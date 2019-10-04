@@ -6,7 +6,7 @@ process.env.NODE_ENV = 'test'
 const chai = require('chai')
 const chaiHttp = require('chai-http')
 const chaiThings = require('chai-things')
-const timekeeper = require('timekeeper')
+//const timekeeper = require('timekeeper')
 const mongoose = require('mongoose')
 
 chai.use(chaiThings)
@@ -27,7 +27,7 @@ now.setHours(10)
 now.setMinutes(0)
 now.setSeconds(0)
 now.setMilliseconds(0)
-timekeeper.freeze(now)
+//timekeeper.freeze(now)
 
 require('./factory')
 
@@ -38,7 +38,7 @@ before(() => {
 })
 
 after((done) => {
-  timekeeper.reset()
+  //timekeeper.reset()
   clearDB()
   console.log('Tests done!')
   done()
