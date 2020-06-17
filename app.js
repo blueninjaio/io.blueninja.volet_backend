@@ -10,6 +10,11 @@ const routes = require('./lib/routes');
 const port = process.env.port || config.port;
 
 mongoose.connect(config.mongoose.uri, config.mongoose.options);
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error: '))
+db.once('open', () => {
+  console.log('DB Connection successfully made')
+})
 
 app.set('port', port);
 app.use(express.json());
